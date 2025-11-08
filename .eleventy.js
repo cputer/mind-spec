@@ -1,15 +1,14 @@
-﻿module.exports = function(eleventyConfig) {
+﻿const MarkdownIt = require("markdown-it");
+
+module.exports = function(eleventyConfig) {
+  const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
+  eleventyConfig.addPairedNunjucksShortcode("markdownRender", (content) => md.render(content || ""));
+
   return {
-    dir: {
-      input: "src",
-      output: "dist",
-      includes: "_includes",
-      data: "_data"
-    },
-    templateFormats: ["njk","md","html","css","json","ico","svg","png","jpg","gif","webp"],
+    dir: { input: "src", includes: "_includes", data: "_data", output: "dist" },
+    templateFormats: ["njk", "md", "html"],
     htmlTemplateEngine: "njk",
     markdownTemplateEngine: "njk",
-    dataTemplateEngine: "njk",
-    pathPrefix: "/mind-spec/"
+    dataTemplateEngine: "njk"
   };
 };

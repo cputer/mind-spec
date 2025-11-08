@@ -1,0 +1,6 @@
+﻿{
+  "layout": "layouts/list.njk",
+  "permalink": "/{{ title | slug }}/index.html"
+}
+
+
