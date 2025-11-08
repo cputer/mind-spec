@@ -1,27 +1,47 @@
-name: Pages
+﻿name: Pages
 on:
   push:
-    branches: [main]
-  workflow_dispatch: {}
+    branches: [ spruce-migration ]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Write last updated
+
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build Eleventy
+        run: npm run build
+
+      - name: Show output (debug)
         run: |
-          mkdir -p docs
-          date -u +"%Y-%m-%d %H:%M UTC (commit $GITHUB_SHA)" > docs/_last_updated.txt
-      - name: Upload static
+          ls -la
+          ls -la dist || true
+
+      - name: Fail if dist is missing
+        run: test -d dist || (echo "dist/ not found. Build failed or wrong output dir." && exit 1)
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: dist
 
   deploy:
     needs: build
@@ -32,4 +52,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-
