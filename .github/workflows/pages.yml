@@ -24,19 +24,30 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install deps
+      - name: Install deps (CI)
         run: npm ci
 
-      - name: Build Eleventy
-        run: npm run build
-
-      - name: Show output (debug)
+      - name: Build Eleventy (explicit)
         run: |
-          ls -la
-          ls -la dist || true
+          npx @11ty/eleventy --input=src --output=dist || true
 
-      - name: Fail if dist is missing
-        run: test -d dist || (echo "dist/ not found. Build failed or wrong output dir." && exit 1)
+      - name: Normalize output -> dist
+        run: |
+          set -eux
+          if [ -d dist ] && [ "$(ls -A dist)" ]; then
+            echo "dist exists"
+          elif [ -d _site ]; then
+            echo "using _site -> dist"
+            mv _site dist
+          elif [ -d build ]; then
+            echo "using build -> dist"
+            mv build dist
+          else
+            echo "No output dir found (dist/_site/build)."
+            echo "Tree for debugging:"; ls -la
+            exit 1
+          fi
+          echo "Final dist tree:"; ls -la dist
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
