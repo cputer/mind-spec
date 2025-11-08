@@ -1,6 +1,6 @@
 ﻿---
 title: "Changelog"
-layout: layouts/changelog.njk
+layout: layouts/post.njk
 changelog:
     - date: "2023-05-24"
       title: "v1.1.0"
@@ -20,6 +20,7 @@ changelog:
       items:
         - "Initial release"
 ---
+
 
 
 
