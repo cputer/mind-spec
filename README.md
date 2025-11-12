@@ -1,36 +1,38 @@
-# MIND Specification
+# Mind Language Specification
 
-> Related: **cputer/mind** (compiler), **cputer/mind-runtime** (backends)
+The **MIND** language evolves through an open specification process. This repository is the
+authoritative source for the normative language specification (`spec/`) and the guiding design
+principles (`design/`). Content here is versioned, reviewed in the open, and kept in lockstep with
+the reference implementation at [cputer/mind](https://github.com/cputer/mind).
 
-This repository hosts the living specification, RFCs, and design notes for the MIND programming language. The content is rendered with [Docsify](https://docsify.js.org) and published automatically to GitHub Pages.
+## Table of contents
 
-## Getting started
+- [Language specification](./spec/)
+  - [Version 1.0 overview](./spec/v1.0/overview.md)
+  - [Lexical structure](./spec/v1.0/lexical.md)
+  - [Type system](./spec/v1.0/types.md)
+  - [Automatic differentiation](./spec/v1.0/autodiff.md)
+  - [Intermediate representation](./spec/v1.0/ir.md)
+- [Design documents](./design/)
+  - [Design principles](./design/principles.md)
+  - [RFC process](./design/rfc-process.md)
+
+## Reading the spec
+
+The specification is organised to mirror the reference compiler documentation in
+[`cputer/mind/docs/`](https://github.com/cputer/mind/tree/main/docs). Each chapter notes
+relationships to implementation details and links to the corresponding background materials when
+informative context is helpful.
+
+Normative sections use RFC 2119 terminology. When a document includes non-normative background or
+examples it is explicitly marked as informative.
+
+## Contributing
 
 - **Read online:** <https://cputer.github.io/mind-spec/>
-- **Browse the source:** Markdown files are organised under [`docs/`](./docs/).
-- **Contribute:** See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for guidelines, preview instructions, and review expectations.
+- **Preview locally:** `npx docsify-cli serve docs`
+- **Guidelines:** See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for review expectations and local setup
+  instructions.
 
-## Local preview
-
-Docsify serves files directly, so no build step is required. Start a local server from the repository root:
-
-```bash
-npx docsify-cli serve docs
-```
-
-The site reloads automatically when you edit files.
-
-## Automation
-
-Two GitHub Actions workflows keep the documentation healthy:
-
-- **Pages** uploads the `docs/` folder to GitHub Pages on every push to `main` (and on manual dispatch).
-- **Link Check** runs daily, on demand, and for every pull request to ensure external links stay valid.
-
-## Status tracking
-
-A quick overview of the readiness of major documentation areas lives in [`STATUS.md`](./STATUS.md).
-
-## Security
-
-Please follow the instructions in [`SECURITY.md`](./SECURITY.md) for reporting security issues.
+Security disclosures should follow [`SECURITY.md`](./SECURITY.md). Project status tracking lives in
+[`STATUS.md`](./STATUS.md).
