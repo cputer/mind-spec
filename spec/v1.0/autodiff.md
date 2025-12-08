@@ -24,7 +24,8 @@ IR. The rules align with the implemented behaviour in the public compiler
 
 - Autodiff runs over verified **Core IR modules**, not over source syntax.
 - Gradient construction produces a **gradient module** containing primal and gradient instructions.
-  Gradients are mapped by a deterministic association: `gradients : ValueId → ValueId`.
+  Gradients are mapped by a deterministic association: `gradients : ValueId → ValueId` (i.e., a map
+  from each differentiated primal `ValueId` to its gradient `ValueId`).
 - The engine traverses the instruction list **in reverse order**, accumulating gradient contributions
   per `ValueId`. Canonicalisation is applied to the resulting module to ensure determinism.
 

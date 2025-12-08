@@ -23,7 +23,7 @@ that ships with the public compiler. The rules cover only the stable, publicly i
 
 - Lowering is **feature-gated** (e.g. via an `mlir-lowering` feature flag in the compiler).
 - The input module MUST be **verified and canonicalised** per [Core IR](./ir.md).
-- Lowering produces deterministic **MLIR textual IR** suitable for snapshot testing. Minor changes may
+- Lowering produces deterministic MLIR textual IR suitable for snapshot testing. Minor changes may
   occur between MIND versions but are stable within a release.
 
 ## Lowering patterns

@@ -57,11 +57,12 @@ out-of-bounds is implementation-defined.
 
 ## Index, slice, and gather
 
-- **`Index`**: consumes one index per dimension and returns a scalar (or lower-rank tensor when
-  indexing into higher-rank tails). The result shape is the suffix of the input shape after removing
-  indexed dimensions.
+- **`Index`**: consumes one index per dimension. If all dimensions are indexed, the result is a
+  scalar; if only some dimensions are indexed, the result is a tensor whose shape is the suffix of
+  the input shape after removing the indexed dimensions.
 - **`Slice`**: each dimension uses `(start, end, step)`. The resulting size per dimension is
-  `ceil((end-start)/step)` for positive steps; negative steps are implementation-defined. Start/end
+  `⌈(end-start)/step⌉` (i.e., the mathematical ceiling of `(end-start)/step`) for positive steps;
+  negative steps are implementation-defined. Start/end
   pairs are verifier-checked for rank alignment; runtime bounds handling is implementation-defined.
 - **`Gather`**: for input shape `[D0, D1, ... Dn]` and indices shape `[I0, ... Ik]`, the result shape
   is `[I0, ... Ik, D1, ... Dn]` when gathering along the leading dimension. Alternate axis selections
@@ -78,7 +79,8 @@ out-of-bounds is implementation-defined.
 - **Output shape**: `[N, H_out, W_out, C_out]` where `H_out` and `W_out` are derived from input size,
   kernel, stride, and padding according to the chosen padding rule.
 
-Channel compatibility (`input.C == filter.C_in`) is mandatory; violations MUST fail verification.
+Channel compatibility (`input.shape[3] == filter.shape[2]`) is mandatory; violations MUST fail
+verification.
 
 ## Relationship to Phase-1 semantics
 

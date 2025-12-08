@@ -46,7 +46,8 @@ The type system relevant to Core v1 consists of:
 Surface syntax maps to the Core IR instruction set:
 
 - **Arithmetic**: `+`, `-`, `*` lower to `BinOp` with broadcasting semantics from
-  [Shapes](./shapes.md#broadcasting). Division is not part of Core v1.
+  [Shapes](./shapes.md#broadcasting). Division is not part of Core v1 (see
+  [IR spec](./ir.md#arithmetic-operations)).
 - **Reductions**: `sum(x, axes, keepdims)` and `mean(x, axes, keepdims)` lower to `Sum`/`Mean`.
 - **Shape ops**: `reshape`, `transpose`, `expand_dims`, and `squeeze` mirror their IR counterparts.
 - **Indexing**: slicing/index expressions lower to `Index`, `Slice`, or `Gather` depending on syntax.
