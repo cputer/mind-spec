@@ -72,10 +72,12 @@ as implementation-defined.
 - **`BinOp(op: Add|Sub|Mul, lhs, rhs) -> ValueId`**
   - Inputs: two tensors broadcastable under the rules in [Shapes](./shapes.md#broadcasting).
   - Output: tensor with broadcasted shape and dtype promotion defined by the implementation.
-  - `Add` and `Sub` are **commutative** for canonicalisation ordering only; semantics remain
-    standard arithmetic.
-  - `Div` is currently **not part of Core v1**; attempts to encode division are
-    implementation-defined and SHOULD be rejected during verification.
+  - For canonicalisation ordering, operands of **commutative** `BinOp`s (such as `Add`, `Mul`) are
+    ordered by ascending `ValueId`. Only `Add` (and other truly commutative operations) are treated
+    as commutative; `Sub` and `Div` are **not** commutative, and their operand order MUST be
+    preserved.
+  - `Div` is currently **not part of Core v1**; attempts to encode division are implementation-defined
+    and SHOULD be rejected during verification.
 
 ### Reductions
 
@@ -86,16 +88,21 @@ as implementation-defined.
   - `Mean` divides by the number of elements reduced (product of reduced dimensions), not by the
     count of axes.
   - Empty `axes` denotes a full reduction consistent with the reference compiler behaviour.
+  - Specifically, passing `axes: []` reduces across **all** dimensions (a full reduction), not a
+    no-op.
 
 ### Shape manipulation
 
 - **`Reshape(input, new_shape: [i64]) -> ValueId`**
-  - Preserves element count; rank may change. Verification fails if element counts differ.
+  - Preserves element count; rank may change. The verifier enforces that element counts match; if they
+    differ, verification fails.
 - **`Transpose(input, permutation: [i64]) -> ValueId`**
   - Permutation length MUST equal input rank and contain each axis exactly once.
 - **`ExpandDims(input, axes: [i64]) -> ValueId`**
-  - Inserts singleton dimensions at the specified axes. Axes MUST be within `[0, rank]` after
-    prior insertions are accounted for.
+  - Inserts singleton dimensions at the specified axes.
+  - When multiple axes are provided, insertions are performed sequentially in ascending order of axis
+    value; each insertion shifts the positions of subsequent axes.
+  - Each axis MUST be within `[0, rank]` at the time of its respective insertion.
 - **`Squeeze(input, axes: [i64]) -> ValueId`**
   - Removes dimensions of size `1` at the specified axes. Axes MUST reference dimensions that are
     exactly `1`.
@@ -103,9 +110,11 @@ as implementation-defined.
 ### Indexing and slicing
 
 - **`Index(input, indices: [i64]) -> ValueId`**
-  - Indexes into `input` with one index per dimension. Indices MUST be within bounds at runtime; the
-    verifier enforces only that the index list length matches rank. Out-of-bounds behaviour is
-    implementation-defined.
+  - Indexes into `input` with one index per dimension.
+  - The verifier enforces only that the index list length matches the tensor rank.
+  - Bounds checking of indices is a runtime responsibility. If any index is out of bounds, the
+    behaviour is implementation-defined (e.g. may result in an error, undefined value, or other
+    backend-specific handling).
 - **`Slice(input, starts: [i64], ends: [i64], steps: [i64]) -> ValueId`**
   - Produces a view with range semantics per dimension. Start/end/step lengths MUST match rank.
     Negative steps and bounds that would create empty slices are implementation-defined.
@@ -125,18 +134,19 @@ as implementation-defined.
 - **`Conv2d(input, filter, strides: [i64], padding: Padding) -> ValueId`**
   - Input format: **NHWC**.
   - Filter format: `[H_k, W_k, C_in, C_out]` (HWCF).
-  - Channels MUST satisfy `input.C == filter.C_in`.
+  - Channels MUST satisfy `input.shape[3] == filter.shape[2]`.
   - Stride and padding semantics MUST match the reference implementation; unsupported padding modes
     are implementation-defined.
 
 ## Canonicalisation
 
 Before optimisation, autodiff, or lowering, modules MUST be **canonicalised**:
-
-- **Operand ordering**: commutative `BinOp` operands are ordered by ascending `ValueId`.
+- **Operand ordering**: operands of commutative `BinOp`s (`Add`, `Mul`, etc.) are ordered by
+  ascending `ValueId`. Non-commutative operations such as `Sub` and `Div` MUST NOT have their
+  operands reordered.
 - **Constant folding**: evaluable `ConstI64`, `ConstTensor`, and `BinOp` expressions MAY be folded
-  when safe. Implementations MUST NOT fold operations that would divide by zero or produce
-  `i64::MIN / -1` overflow; those remain unfused.
+  when safe. Implementations MUST NOT fold operations that would result in unsafe or undefined
+  behaviour; those remain unfused.
 - **Dead instruction pruning**: instructions whose outputs are unused and are not declared module
   outputs or referenced by gradient outputs MAY be removed.
 
@@ -154,7 +164,7 @@ A verifier MUST reject IR modules that violate the following rules:
    reshape element-count preservation and transpose permutation length.
 4. **Conv2d constraints**:
    - Input is NHWC; filter is `[H_k, W_k, C_in, C_out]`.
-   - `input.C == filter.C_in`.
+   - `input.shape[3] == filter.shape[2]`.
    - Strides and padding conform to the implemented rules; unsupported combinations are
      implementation-defined but MUST be diagnosed if the runtime cannot execute them.
 

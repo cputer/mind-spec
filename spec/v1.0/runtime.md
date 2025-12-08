@@ -21,11 +21,11 @@ implemented by public runtimes without prescribing internal threading or device 
 
 ## Runtime model
 
-A conforming runtime provides a **MindRuntime-like abstraction** capable of:
+A conforming runtime provides an abstraction capable of:
 
 - Allocating tensors from a **tensor descriptor** containing shape, dtype, and optional device.
-- Executing named **operations** matching the Core IR instruction set via a `run_op`-style entry point
-  that consumes inputs and produces outputs deterministically.
+- Executing named **operations** matching the Core IR instruction set by providing a mechanism that
+  consumes inputs and produces outputs deterministically.
 - Synchronising device/stream state where relevant.
 
 The interface is intentionally language-agnostic; concrete API surfaces MAY differ by implementation
