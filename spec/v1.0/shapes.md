@@ -32,7 +32,7 @@ Shapes and dtypes are **device-agnostic**: the same rules apply to the CPU basel
 Formally, a shape is a finite sequence of non-negative integers:
 
 ```text
-Shape = [d_0, d_1, ..., d_{n-1}]   where each d_i ∈ ℕ
+Shape = [d_0, d_1, ..., d_{n-1}]   where each d_i ∈ ℕ (here, ℕ includes 0)
 Rank(Shape) = n
 ```
 
@@ -64,9 +64,9 @@ else if B'[i] == 1     → C[i] = A'[i]
 else                   → error (incompatible shapes)
 ```
 
-The broadcasted shape `C` is the elementwise result of this rule. If any
-dimension fails the rule, the operator is required to produce a **shape error**
-rather than silently proceeding.
+The broadcasted shape `C` is the dimension-by-dimension result of this rule.
+If any dimension fails the compatibility checks, the operator is required to
+produce a **shape error** rather than silently proceeding.
 
 ### Elementwise unary
 
@@ -115,7 +115,7 @@ If the input is already a scalar (`[]`), the output is also a scalar of the
 same shape. Implementations must not silently change the rank (for example, to
 `[1]`); the scalar representation is part of the contract.
 
-Axis-parameterised reductions (for example, `sum` over a specific axis) are
+Axis-parameterized reductions (for example, `sum` over a specific axis) are
 considered an extension and must follow the same error model:
 
 - invalid or out-of-range axes must produce a shape error;
