@@ -59,6 +59,20 @@ Implementations MUST support bidirectional type inference:
 Inference relies on unification with occurs checks. Implementations SHOULD emit informative error
 messages when inference requires additional annotations.
 
+### Core IR integration
+
+The type checker participates directly in Core IR construction:
+
+- **Symbol tables** feed module inputs. Each declared value is materialised as an `Input` instruction
+  carrying its resolved tensor type so that the IR verifier can enforce the single-definition rule.
+- **Operation typing** mirrors the IR instruction set. For arithmetic operations the operands MUST
+  share a dtype; shape compatibility follows the broadcasting rules in
+  [Shapes](./shapes.md#broadcasting). Scalar operands implicitly broadcast to the non-scalar
+  operand's shape.
+- **Verification before emission**: translators are expected to reject programs with unknown dtypes,
+  incompatible shapes, or undeclared symbols before emitting IR. This aligns the surface-language
+  diagnostics with the invariants described in [Core IR](./ir.md#verification).
+
 ## Traits and generics
 
 - Traits declare associated functions, types, and laws. Implementations MUST enforce that all

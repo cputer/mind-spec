@@ -49,6 +49,23 @@ A module declares:
 Modules MUST be serialisable to a stable textual form. Canonicalisation (below) establishes the
 canonical ordering expected by downstream pipelines.
 
+### Reference encoding
+
+The reference compiler exposes a minimal textual encoding to aid debugging and unit testing. The
+encoding follows the ordered instruction list model described above:
+
+- **Inputs**: each module input materialises as an `Input` instruction carrying a `name` attribute
+  and the declared tensor type (dtype plus shape). Inputs appear first and receive the lowest
+  `ValueId`s.
+- **Operations**: instructions render as `%<id> = <Opcode> (<operands>) {attrs} : <type>`. Attribute
+  braces are omitted when empty and operand lists are comma-separated. Result types record the
+  verifier-visible tensor type.
+- **Outputs**: the module records output value identifiers explicitly to satisfy the interface
+  contract. When serialised, outputs appear as a trailing `outputs: %<id>, ...` list.
+
+This encoding is intentionally small and lossless so that translators from the surface language can
+round-trip canonical modules during conformance testing.
+
 ## Instruction set and semantics
 
 The following instructions constitute the Phase-2 surface of Core IR. Unless stated otherwise, all

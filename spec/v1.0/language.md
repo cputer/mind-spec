@@ -65,5 +65,25 @@ Compilation of the surface language yields canonical IR modules that obey:
 - **Explicit tensor metadata** for dtype and shape.
 - **Deterministic lowering** enabling repeatable autodiff and MLIR generation.
 
+### Canonical translation pipeline
+
+Surface constructs lower to the Core IR through a deterministic, type-directed
+pipeline:
+
+1. **Symbols become inputs**: every free variable in the expression context
+   materialises as an `Input` instruction that records its declared type and
+   shape metadata.
+2. **Literals become constants**: scalar or tensor literals emit
+   `ConstTensor` instructions with dtype and shape encoded explicitly.
+3. **Operators become IR instructions**: arithmetic expressions lower to `BinOp`
+   (with `Add`, `Sub`, or `Mul` semantics) and other intrinsic operations map to
+   the IR instruction set described in [Core IR](./ir.md).
+4. **Outputs are explicit**: the last produced `ValueId` is marked as the
+   module output to preserve the single-definition rule.
+
+Implementations are expected to reuse the type system rules in
+[Types](./types.md) during translation so that invalid programs are rejected
+before IR is emitted.
+
 Language features beyond this tensor core (e.g. generics, traits) are covered in the broader v1.0
 specification but are not required for Core v1 conformance.
