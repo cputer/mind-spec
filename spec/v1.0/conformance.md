@@ -226,7 +226,7 @@ Implementations claiming conformance MUST publish:
 
 ### Compliance statement template
 
-```
+```text
 [Implementation Name] claims Core v1 [CPU baseline | GPU profile] conformance.
 
 - Specification version: Core v1.0

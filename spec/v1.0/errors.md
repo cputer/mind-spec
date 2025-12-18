@@ -311,7 +311,7 @@ Implementations SHOULD provide:
 
 Recommended format for CLI output:
 
-```
+```text
 error[E3001]: Broadcasting failed at dimension 1
   --> src/model.mind:42:15
    |
