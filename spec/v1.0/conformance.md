@@ -133,7 +133,7 @@ expected:
       dtype: "f32"
       shape: [2, 3]
       values: [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
-      tolerance: 1e-6  # Floating-point comparison tolerance
+      tolerance: 1e-6  # Optional per-test tolerance (MUST NOT exceed global maximum tolerance)
 
   # For error cases:
   error:
@@ -226,7 +226,7 @@ Implementations claiming conformance MUST publish:
 
 ### Compliance statement template
 
-```
+```text
 [Implementation Name] claims Core v1 [CPU baseline | GPU profile] conformance.
 
 - Specification version: Core v1.0
