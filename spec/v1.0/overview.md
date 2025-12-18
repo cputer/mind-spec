@@ -51,6 +51,9 @@ Core v1 is organised into the following pillars:
     methodology, optimization strategies, and profiling guidance (informative).
 13. **Foreign Function Interface** ([`ffi.md`](./ffi.md)) — C ABI, Python/C++/Rust bindings, memory
     management, and cross-language interoperability.
+14. **Future Extensions** ([`future-extensions.md`](./future-extensions.md)) — forward-looking
+    considerations for domain-specific extensions including neuroscience/BCI, embedded AI, and
+    safety-critical systems (informative).
 
 Legacy chapters such as [`lexical.md`](./lexical.md) and [`types.md`](./types.md) remain available for
 background on the broader language but are not required for Core v1 conformance.
