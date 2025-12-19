@@ -97,20 +97,53 @@ this specification. Implementations MAY optimise freely provided they preserve t
 
 ### GPU profile operations
 
-The reference runtime (`cputer/mind-runtime`) currently implements a **MockGpuBackend** for testing.
+The reference runtime (`cputer/mind-runtime`) implements a **MockGpuBackend** for conformance testing.
+This backend delegates to the CPU runtime internally while enforcing GPU-specific validation rules.
 Production CUDA/ROCm backends are planned for future releases.
 
-**GPU-supported operations (3)**:
-- `add` — Element-wise addition
-- `copy` — Tensor copy
-- `fill` — Fill with constant value
-
-**CPU-only operations (15)**:
+**GPU-supported operations (19)**:
 - Reductions: `sum_all`, `mean_all`, `sum`, `mean`
-- Elementwise: `mul`, `relu`
+- Elementwise: `add`, `mul`, `relu`
 - Linear algebra: `matmul`, `dot`, `conv2d`
 - Shape ops: `reshape`, `expand_dims`, `squeeze`, `transpose`
 - Indexing: `index`, `slice`, `gather`
+- GPU-specific: `copy`, `fill`
+
+> **Note**: In the reference implementation (MockGpuBackend), these operations are supported on the
+> GPU profile but execute via CPU delegation. Production backends will implement native GPU kernels.
+
+### GPU tensor constraints
+
+All GPU tensors MUST satisfy the following constraints:
+
+| Constraint | Requirement |
+|------------|-------------|
+| Device | `DeviceKind::Gpu` |
+| Dtype | `f32` only |
+| Alignment | `numel % 4 == 0` (element count must be multiple of 4) |
+
+Tensors that violate these constraints MUST be rejected at allocation time or prior to execution.
+
+### GPU operation semantics
+
+**copy** (1 input, 1 output):
+Copies input tensor to output tensor. Shapes must match exactly.
+
+**fill** (1 input, 1 output):
+Fills the output tensor with a constant value. Due to the GPU alignment constraint
+(`numel % 4 == 0`), scalar 1-element tensors cannot be allocated on GPU. Therefore,
+the fill value is read from `inputs[0].data[0]` — the first element of the input tensor.
+The remaining elements of the input tensor are ignored (padding).
+
+Example (pseudocode):
+```
+value_tensor = allocate(shape=[4], device=Gpu)  // 4 elements for alignment
+write(value_tensor, [42.0, 0.0, 0.0, 0.0])      // fill value in first element
+
+output = allocate(shape=[8], device=Gpu)
+run_op("fill", inputs=[value_tensor], outputs=[output])
+// output now contains [42.0, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0]
+```
 
 ### Target hardware
 
