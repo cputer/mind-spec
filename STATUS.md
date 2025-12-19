@@ -29,8 +29,10 @@ The formal Core v1 specification documents are located in `spec/v1.0/`. See [`ov
 | ---- | ----- | ------ | ----- |
 | Core language spec | `docs/spec/` | ✅ Stable | Content mirrors the latest compiler implementation. Minor clarifications welcome. |
 | Standard library | `docs/spec/stdlib.md` | ✅ Stable | Aligned with Core v1 spec and `cputer/mind-runtime`. |
-| RFCs | `docs/rfcs/` | 📝 Drafts in progress | New proposals accepted via pull requests. Older RFCs may need modernization. |
-| Design notes | `docs/design/` | 🚧 Under active development | Requires more diagrams and examples to aid new contributors. |
+| RFCs | `docs/rfcs/` | ✅ Stable | 8 implemented RFCs documented. New proposals accepted via pull requests. |
+| Design notes | `docs/design/` | ✅ Stable | Architecture diagrams and autodiff design complete. |
+| Examples | `examples/` | ✅ Stable | Standalone examples for basics, autodiff, linear algebra, FFI, and IR. |
+| Conformance tests | `tests/` | ✅ Stable | Sample test corpus with YAML format per conformance.md. |
 | Changelog | `docs/changelog.md` | ✅ Up to date | Released alongside each tagged compiler/runtime version. |
 
 _Status legend_: ✅ Stable • ⚠️ Needs updates • 🚧 Under active development • 📝 Drafts in progress.
