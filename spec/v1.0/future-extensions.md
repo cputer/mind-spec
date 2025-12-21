@@ -308,7 +308,7 @@ mind::data::
   batch::          # Batch data sources
     spark_context(config) -> SparkContext
     read_parquet(path) -> DataFrame      # Generic MIND tabular type
-    read_csv(path, schema) -> DataFrame  # SparkDataFrame is Spark-specific wrapper
+    read_csv(path, schema) -> DataFrame  # Generic MIND tabular type (CSV input)
 
   connectors::     # Database connectors
     postgres_pool(config) -> ConnectionPool
