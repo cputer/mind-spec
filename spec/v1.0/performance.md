@@ -310,9 +310,9 @@ This section contains empirically validated benchmark results for the reference 
 |-----------|---------|
 | Platform | Linux 6.14.0 x86_64 |
 | Python | 3.11+ |
-| PyTorch | 2.0+ (inductor backend) |
+| PyTorch | 2.0+ torch.compile (inductor backend) |
 | MIND | 0.1.0 (release build) |
-| Measurement | Rust Criterion benchmarks (in-process) |
+| Measurement | Rust Criterion benchmarks (in-process, fair comparison) |
 
 ### Compilation speed
 
@@ -355,7 +355,7 @@ This section contains empirically validated benchmark results for the reference 
 | medium_matmul | 52.8 | 0.3 | [52.5, 53.1] |
 | large_matmul | 52.2 | 0.3 | [51.9, 52.5] |
 
-**Comparison with PyTorch 2.0 inductor** (Machine 2):
+**Comparison with PyTorch 2.0 torch.compile** (Machine 2, fair in-process comparison):
 
 | Benchmark | PyTorch 2.0 (inductor) | MIND | Speedup |
 |-----------|------------------------|------|---------|
