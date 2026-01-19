@@ -267,3 +267,35 @@ Implementations SHOULD enforce:
 - Maximum string count: 1,000,000
 - Maximum value count: 100,000
 - Maximum string length: 64 KB
+
+## Appendix: Format Comparison
+
+Residual block example `Y = relu(X @ W + b) + X`:
+
+### Size Comparison
+
+| Format | Tokens | Bytes | vs JSON (bytes) | Use Case |
+|--------|--------|-------|-----------------|----------|
+| JSON | ~180 | ~450 | baseline | Legacy interchange |
+| TOML | ~151 | ~380 | 1.2x | Config files |
+| TOON | ~67 | ~170 | 2.6x | Compact text |
+| mic@1 | ~45 | ~120 | 3.8x | Legacy Mind IR |
+| mic@2 | ~28 | ~85 | 5.3x | LLM prompts, git diffs |
+| **MIC-B v2** | - | **~40** | **11.3x** | Storage, network |
+
+### Comparison with Other Binary Formats
+
+| Format | Size (residual) | Decode Speed | Extensibility |
+|--------|-----------------|--------------|---------------|
+| **MIC-B v2** | ~40 bytes | Fast (1-pass) | Custom opcodes |
+| Protocol Buffers | ~95 bytes | Fast | Field versioning |
+| FlatBuffers | ~100 bytes | Very fast | Excellent |
+| LLVM Bitcode | ~200 bytes | Slow | Complex |
+| WebAssembly | ~120 bytes | Fast | Tables extension |
+
+### Why MIC-B v2?
+
+- **Specialized**: Optimized for neural network IR (no generic field tags)
+- **Sequential**: Layout matches evaluation order (no random access needed)
+- **Deterministic**: Identical bytes for identical graphs
+- **Simple**: One-pass decoder, minimal complexity

@@ -215,13 +215,52 @@ Implementations SHOULD enforce:
 | Opcodes | Verbose (`add`, `matmul`) | Compact (`+`, `m`) |
 | Token efficiency | Baseline | ~40% reduction |
 
-## Appendix: Token Count Comparison
+## Appendix: Format Comparison
 
-Residual block example:
+Residual block example `Y = relu(X @ W + b) + X`:
 
-| Format | Tokens | Bytes |
-|--------|--------|-------|
-| JSON | ~180 | ~450 |
-| mic@1 | ~45 | ~120 |
-| mic@2 | ~28 | ~85 |
-| MIC-B | - | ~40 |
+### Size Comparison
+
+| Format | Tokens | Bytes | vs JSON (tokens) | vs JSON (bytes) |
+|--------|--------|-------|------------------|-----------------|
+| JSON | ~180 | ~450 | baseline | baseline |
+| TOML | ~151 | ~380 | 1.2x | 1.2x |
+| TOON | ~67 | ~170 | 2.7x | 2.6x |
+| mic@1 | ~45 | ~120 | 4.0x | 3.8x |
+| **mic@2** | **~28** | **~85** | **6.4x** | **5.3x** |
+| **MIC-B v2** | - | **~40** | - | **11.3x** |
+
+### Feature Comparison
+
+| Feature | JSON | TOON | mic@1 | mic@2 | MIC-B v2 |
+|---------|------|------|-------|-------|----------|
+| Human readable | Yes | Yes | Yes | Yes | No |
+| Git-friendly | No | Partial | Yes | Yes | No |
+| Deterministic | No | No | Yes | Yes | Yes |
+| LLM-optimized | No | No | Partial | Yes | N/A |
+| Binary format | No | No | No | No | Yes |
+| Implicit IDs | No | No | No | Yes | Yes |
+
+### Syntax Comparison
+
+**JSON**
+```json
+{"nodes":[{"id":0,"op":"param","name":"X"},{"id":3,"op":"matmul","inputs":[0,1]}]}
+```
+
+**TOON**
+```
+nodes=[{id=0 op=param name=X},{id=3 op=matmul inputs=[0,1]}]
+```
+
+**mic@1**
+```
+N0 param "X" T0
+N3 matmul N0 N1 T0
+```
+
+**mic@2**
+```
+a X T0
+m 0 1
+```
