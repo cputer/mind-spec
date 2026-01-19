@@ -503,7 +503,7 @@ Planned FFI improvements:
 
 ## Reference implementation C API (`mind-runtime`)
 
-The `cputer/mind-runtime` provides the following C API (feature flag: `--features ffi`):
+The `star-ga/mind-runtime` provides the following C API (feature flag: `--features ffi`):
 
 ### Enumerations
 

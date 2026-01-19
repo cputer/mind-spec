@@ -306,7 +306,7 @@ Each specification release MUST include:
 
 ### Reference implementation versioning
 
-The reference implementation (`cputer/mind`) has its own version numbers:
+The reference implementation (`star-ga/mind`) has its own version numbers:
 
 - **Implementation version**: mind-compiler v0.4.2
 - **Implements specification**: Core v1.2.0

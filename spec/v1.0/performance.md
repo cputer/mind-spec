@@ -184,7 +184,7 @@ valgrind --tool=massif mind run input.mind
 
 ### Standard benchmark suite
 
-The official MIND benchmark suite (`benchmarks/` in cputer/mind repo) includes:
+The official MIND benchmark suite (`benchmarks/` in star-ga/mind repo) includes:
 
 **1. Core operations** (`benchmarks/ops/`)
 - Arithmetic: add, mul, div (element-wise and broadcasting)

@@ -19,7 +19,7 @@ limitations under the License.
 This directory contains sample conformance tests as specified in
 [`conformance.md`](../spec/v1.0/conformance.md). The full golden test corpus
 is distributed with the reference implementation at
-[`cputer/mind`](https://github.com/cputer/mind).
+[`star-ga/mind`](https://github.com/star-ga/mind).
 
 ## Directory Structure
 

@@ -93,11 +93,11 @@ this specification. Implementations MAY optimise freely provided they preserve t
   target (e.g. `BackendTarget::Gpu`) is unavailable or feature-gated, and MUST apply the stable
   error semantics described above for the GPU profile.
 
-## Reference implementation status (`cputer/mind-runtime`)
+## Reference implementation status (`star-ga/mind-runtime`)
 
 ### GPU profile operations
 
-The reference runtime (`cputer/mind-runtime`) implements **production-grade GPU backends**:
+The reference runtime (`star-ga/mind-runtime`) implements **production-grade GPU backends**:
 
 | Backend | Status | Features |
 |---------|--------|----------|

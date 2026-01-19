@@ -18,7 +18,7 @@ limitations under the License.
 
 This chapter specifies the **Core v1 reverse-mode autodiff** pipeline that operates on canonical Core
 IR. The rules align with the implemented behaviour in the public compiler
-[`cputer/mind`](https://github.com/cputer/mind) and describe no additional proprietary features.
+[`star-ga/mind`](https://github.com/star-ga/mind) and describe no additional proprietary features.
 
 ## Model
 
@@ -224,7 +224,7 @@ Any other instruction not listed above MUST also trigger `AutodiffError::Unsuppo
 extending Core v1 with additional operations MUST document their derivative rules or explicitly mark
 them as non-differentiable.
 
-> **Implementation note (2025):** Conv2d gradients are fully implemented in `cputer/mind` (compiler
+> **Implementation note (2025):** Conv2d gradients are fully implemented in `star-ga/mind` (compiler
 > autodiff, IR lowering, and tests). See the gradient rules in [Linear and tensor algebra](#linear-and-tensor-algebra).
 
 ## Determinism

@@ -39,9 +39,9 @@ The goal of this specification is to provide a stable foundation for:
 
 | Repo | Purpose | Status |
 |------|----------|--------|
-| [`cputer/mind`](https://github.com/cputer/mind) | Public compiler, IR, autodiff, and MLIR lowering. | ✅ 100% (69 tests, LLVM 18) |
-| [`cputer/mind-runtime`](https://github.com/cputer/mind-runtime) | Reference runtime backend implementing the deterministic executor. | ✅ 100% (33+ tests, GPU docs) |
-| [`cputer/mind-spec`](https://github.com/cputer/mind-spec) | This specification and design docs. | ✅ 100% (14 chapters stable) |
+| [`star-ga/mind`](https://github.com/star-ga/mind) | Public compiler, IR, autodiff, and MLIR lowering. | ✅ 100% (69 tests, LLVM 18) |
+| [`star-ga/mind-runtime`](https://github.com/star-ga/mind-runtime) | Reference runtime backend implementing the deterministic executor. | ✅ 100% (33+ tests, GPU docs) |
+| [`star-ga/mind-spec`](https://github.com/star-ga/mind-spec) | This specification and design docs. | ✅ 100% (14 chapters stable) |
 
 ---
 

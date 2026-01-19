@@ -73,8 +73,8 @@ verified and passing.
   - IR (4): simple_module, autodiff_output, matmul_module, reduction_module
 
 - **Reference implementation sync**:
-  - `cputer/mind` compiler: 69 tests passing, LLVM 18, 0 Clippy warnings
-  - `cputer/mind-runtime`: 33+ tests, GPU docs, release workflow
+  - `star-ga/mind` compiler: 69 tests passing, LLVM 18, 0 Clippy warnings
+  - `star-ga/mind-runtime`: 33+ tests, GPU docs, release workflow
 
 ### Changed
 

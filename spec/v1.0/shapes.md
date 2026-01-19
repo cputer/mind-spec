@@ -286,7 +286,7 @@ are consistent:
 ## Reference shape engine
 
 The Core v1 shape rules in this chapter are intended to be straightforward to
-implement. The reference implementation in `cputer/mind` exposes a small shape
+implement. The reference implementation in `star-ga/mind` exposes a small shape
 engine (`mind::shapes::engine`) that:
 
 - encodes the high-level rule category for each Core v1 operator

@@ -18,7 +18,7 @@ limitations under the License.
 
 Use this index to navigate the community edition of the MIND language specification. Normative Core
 v1 content is located in [`spec/v1.0`](../../spec/v1.0/overview.md) and mirrors the public Phase-2
-implementation in [`cputer/mind`](https://github.com/cputer/mind).
+implementation in [`star-ga/mind`](https://github.com/star-ga/mind).
 
 | Topic | Overview | Normative reference |
 | ----- | -------- | ------------------- |

@@ -17,7 +17,7 @@ limitations under the License.
 # Core v1 Specification Overview
 
 This overview enumerates the **Core v1** documents that together define the public behaviour
-implemented by [`cputer/mind`](https://github.com/cputer/mind) and its reference runtime. The scope is
+implemented by [`star-ga/mind`](https://github.com/star-ga/mind) and its reference runtime. The scope is
 intentionally limited to public, deterministic semantics; private infrastructure and experimental
 features are out of scope.
 
@@ -68,7 +68,7 @@ Implementations claiming Core v1 compliance MUST:
   execution) given identical inputs.
 - Surface verification failures and unsupported features using deterministic diagnostics.
 
-Reference implementations in `cputer/mind` and `cputer/mind-runtime` are expected to follow these
+Reference implementations in `star-ga/mind` and `star-ga/mind-runtime` are expected to follow these
 rules; this repository is the normative source of truth for the semantics above.
 
 ## Related documents
@@ -92,5 +92,5 @@ contract for GPU-capable runtimes.
 Core v1 conformance is defined in [`conformance.md`](./conformance.md) and evaluated at the
 implementation level. Implementations MAY claim either the baseline CPU conformance or the optional
 GPU profile conformance (which inherits the CPU baseline). Conformance is validated against the
-public golden test corpus published with [`cputer/mind`](https://github.com/cputer/mind), which
+public golden test corpus published with [`star-ga/mind`](https://github.com/star-ga/mind), which
 codifies the behaviours described across the Core v1 chapters.

@@ -19,7 +19,7 @@ limitations under the License.
 The MIND type system enforces static correctness and enables efficient differentiation. This chapter
 formalises type formation, typing judgements, inference constraints, and trait coherence. It aligns
 with the reference notes in
-[`cputer/mind/docs/type-system.md`](https://github.com/cputer/mind/blob/main/docs/type-system.md).
+[`star-ga/mind/docs/type-system.md`](https://github.com/star-ga/mind/blob/main/docs/type-system.md).
 
 ## Type formation
 
@@ -45,7 +45,7 @@ applicable rule. Selected core rules include:
 - **Function abstraction**: if `Γ, x1 : T1, ..., xn : Tn ⊢ e : U` then `Γ ⊢ fn(x1 : T1, ..., xn : Tn) -> U { e } : (T1, ..., Tn) -> U`.
 
 A comprehensive derivation catalogue is maintained in the implementation notes
-([informative](https://github.com/cputer/mind/blob/main/docs/type-system.md)).
+([informative](https://github.com/star-ga/mind/blob/main/docs/type-system.md)).
 
 ## Type inference
 

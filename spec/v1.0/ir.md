@@ -21,7 +21,7 @@ The IR is the canonical interchange format between the surface language, the sta
 MLIR lowering, and backend runtimes.
 
 The specification describes only the deterministic, publicly implemented behaviour in
-[`cputer/mind`](https://github.com/cputer/mind). It does not reference private infrastructure or
+[`star-ga/mind`](https://github.com/star-ga/mind). It does not reference private infrastructure or
 undocumented extensions.
 
 ## IR module model

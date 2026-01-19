@@ -1,13 +1,13 @@
 # Mind Language Specification
 
 [![Spec Status](https://img.shields.io/badge/spec-v1.0%20stable-brightgreen)](./STATUS.md)
-[![Compiler](https://img.shields.io/badge/compiler-100%25-brightgreen)](https://github.com/cputer/mind)
-[![Runtime](https://img.shields.io/badge/runtime-100%25-brightgreen)](https://github.com/cputer/mind-runtime)
+[![Compiler](https://img.shields.io/badge/compiler-100%25-brightgreen)](https://github.com/star-ga/mind)
+[![Runtime](https://img.shields.io/badge/runtime-100%25-brightgreen)](https://github.com/star-ga/mind-runtime)
 
 The **MIND** language evolves through an open specification process. This repository is the
 authoritative source for the normative language specification (`spec/`) and the guiding design
 principles (`design/`). Content here is versioned, reviewed in the open, and kept in lockstep with
-the public reference implementation at [cputer/mind](https://github.com/cputer/mind).
+the public reference implementation at [star-ga/mind](https://github.com/star-ga/mind).
 
 ## Table of contents
 
@@ -34,7 +34,7 @@ the public reference implementation at [cputer/mind](https://github.com/cputer/m
 ## Reading the spec
 
 The specification is organised to mirror the reference compiler documentation in
-[`cputer/mind/docs/`](https://github.com/cputer/mind/tree/main/docs). Each chapter notes
+[`star-ga/mind/docs/`](https://github.com/star-ga/mind/tree/main/docs). Each chapter notes
 relationships to implementation details and links to the corresponding background materials
 when informative context is helpful.
 
@@ -43,7 +43,7 @@ examples it is explicitly marked as informative.
 
 ## Contributing
 
-- **Read online:** <https://cputer.github.io/mind-spec/>
+- **Read online:** <https://star-ga.github.io/mind-spec/>
 - **Preview locally:** `npx docsify-cli serve docs`
 - **Guidelines:** See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for review expectations and local setup
   instructions.

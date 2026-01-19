@@ -55,7 +55,7 @@ To champion any of these topics, open a GitHub issue to start discussion.
 
 1. **Comment on existing proposals** — Provide feedback on open PRs
 2. **Propose alternatives** — Suggest different approaches
-3. **Prototype implementations** — Test feasibility in cputer/mind
+3. **Prototype implementations** — Test feasibility in star-ga/mind
 4. **Write documentation** — Help clarify proposals
 
 ---

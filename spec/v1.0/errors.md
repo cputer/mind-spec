@@ -356,7 +356,7 @@ Error codes in this catalog are **stable across Core v1 versions**:
 - Renumbering or removing error codes is NOT permitted without major version change
 - Context requirements MAY be expanded but MUST NOT be reduced
 
-## Reference implementation (`cputer/mind`)
+## Reference implementation (`star-ga/mind`)
 
 The reference compiler implements the following error codes:
 

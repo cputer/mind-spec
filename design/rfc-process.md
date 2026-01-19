@@ -19,7 +19,7 @@ limitations under the License.
 Changes to the MIND language specification or design principles MUST proceed through the Request for
 Comments (RFC) process. This document defines the submission workflow, review expectations, and
 lifecycle states for proposals. It complements the governance notes in
-[`cputer/mind/docs/rfcs`](https://github.com/cputer/mind/tree/main/docs/rfcs).
+[`star-ga/mind/docs/rfcs`](https://github.com/star-ga/mind/tree/main/docs/rfcs).
 
 ## Goals
 
@@ -42,7 +42,7 @@ Editorial fixes, typo corrections, or purely informative additions MAY land with
 
 ## Workflow
 
-1. **Proposal**: Authors fork `cputer/mind-spec`, create a branch, and add an RFC under
+1. **Proposal**: Authors fork `star-ga/mind-spec`, create a branch, and add an RFC under
    `design/rfcs/NNNN-short-title.md` (directories created as needed).
 2. **Pre-review**: Authors open a draft pull request referencing relevant sections of
    [`spec/v1.0`](../spec/v1.0/overview.md) and implementation notes.
@@ -51,7 +51,7 @@ Editorial fixes, typo corrections, or purely informative additions MAY land with
 4. **Final comment period (FCP)**: A designated maintainer announces a one-week FCP. Blocking issues
    MUST be resolved before the FCP completes.
 5. **Merge**: Once approved, the RFC merges alongside implementation tracking issues in
-   [`cputer/mind`](https://github.com/cputer/mind).
+   [`star-ga/mind`](https://github.com/star-ga/mind).
 
 ## States
 
@@ -67,5 +67,5 @@ State transitions MUST be recorded at the top of the RFC with dates and reviewer
 
 ## Implementation tracking
 
-Accepted RFCs MUST link to tracking issues in both `cputer/mind-spec` and `cputer/mind`. Implementers
+Accepted RFCs MUST link to tracking issues in both `star-ga/mind-spec` and `star-ga/mind`. Implementers
 SHOULD update the status regularly until the feature ships or is explicitly abandoned.

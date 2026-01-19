@@ -53,7 +53,7 @@ For the profile(s) an implementation claims:
 ## Conformance verification
 
 Conformance is evaluated by executing the published **golden test corpus** distributed with the
-reference implementation in [`cputer/mind`](https://github.com/cputer/mind). The corpus encodes the
+reference implementation in [`star-ga/mind`](https://github.com/star-ga/mind). The corpus encodes the
 behavioural contracts described in this specification across parsing, IR verification, autodiff,
 MLIR lowering, runtime execution, and GPU backend selection. Other implementations MAY re-use or
 port the corpus to verify their claimed profile(s). No specific CI or tooling is mandated; the

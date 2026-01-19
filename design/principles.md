@@ -25,19 +25,19 @@ revisions. References to supporting discussion in the compiler repository are in
 Language features SHOULD prioritise clarity of expression for both human readers and tooling. Syntax
 that introduces ambiguity or relies on implicit behaviour is discouraged unless accompanied by
 comprehensive diagnostics and formatter support. See the implementation commentary in
-[`cputer/mind/docs/style`](https://github.com/cputer/mind/tree/main/docs/style).
+[`star-ga/mind/docs/style`](https://github.com/star-ga/mind/tree/main/docs/style).
 
 ## Differentiation as a first-class concern
 
 Automatic differentiation is central to MIND. Language features MUST preserve differentiability where
 possible and provide explicit escape hatches when not. Compiler passes SHOULD surface derivative
-information for inspection and debugging. See [`cputer/mind/docs/autodiff`](https://github.com/cputer/mind/tree/main/docs/autodiff).
+information for inspection and debugging. See [`star-ga/mind/docs/autodiff`](https://github.com/star-ga/mind/tree/main/docs/autodiff).
 
 ## Predictable performance
 
 Program performance SHOULD be predictable from surface-level constructs. Optimisations MAY reorder
 expressions but MUST respect observable semantics and differentiation invariants. Guidance on
-performance tuning lives in [`cputer/mind/docs/perf`](https://github.com/cputer/mind/tree/main/docs/perf).
+performance tuning lives in [`star-ga/mind/docs/perf`](https://github.com/star-ga/mind/tree/main/docs/perf).
 
 ## Stability with room for evolution
 

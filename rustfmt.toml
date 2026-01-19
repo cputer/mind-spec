@@ -1,4 +1,4 @@
-# Rustfmt configuration aligned with cputer/mind repository
+# Rustfmt configuration aligned with star-ga/mind repository
 # See: https://rust-lang.github.io/rustfmt/
 
 edition = "2021"

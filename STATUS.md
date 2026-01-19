@@ -28,7 +28,7 @@ The formal Core v1 specification documents are located in `spec/v1.0/`. See [`ov
 | Area | Scope | Status | Notes |
 | ---- | ----- | ------ | ----- |
 | Core language spec | `docs/spec/` | ✅ Stable | Content mirrors the latest compiler implementation. Minor clarifications welcome. |
-| Standard library | `docs/spec/stdlib.md` | ✅ Stable | Aligned with Core v1 spec and `cputer/mind-runtime`. |
+| Standard library | `docs/spec/stdlib.md` | ✅ Stable | Aligned with Core v1 spec and `star-ga/mind-runtime`. |
 | RFCs | `docs/rfcs/` | ✅ Stable | 10 implemented RFCs (Core v1 + MIC/MAP). New proposals accepted via pull requests. |
 | Design notes | `docs/design/` | ✅ Stable | Architecture diagrams and autodiff design complete. |
 | Examples | `examples/` | ✅ Stable | Standalone examples for basics, autodiff, linear algebra, FFI, and IR. |
@@ -39,8 +39,8 @@ The formal Core v1 specification documents are located in `spec/v1.0/`. See [`ov
 
 | Implementation | Repo | Status | Notes |
 | -------------- | ---- | ------ | ----- |
-| MIND Compiler | [`cputer/mind`](https://github.com/cputer/mind) | ✅ Complete | 69 tests passing, LLVM 18, 0 Clippy warnings, FFI safety docs. |
-| MIND Runtime | [`cputer/mind-runtime`](https://github.com/cputer/mind-runtime) | ✅ Complete | 33+ tests, GPU docs, release workflow, self-contained. |
+| MIND Compiler | [`star-ga/mind`](https://github.com/star-ga/mind) | ✅ Complete | 69 tests passing, LLVM 18, 0 Clippy warnings, FFI safety docs. |
+| MIND Runtime | [`star-ga/mind-runtime`](https://github.com/star-ga/mind-runtime) | ✅ Complete | 33+ tests, GPU docs, release workflow, self-contained. |
 
 _Status legend_: ✅ Stable • ⚠️ Needs updates • 🚧 Under active development • 📝 Drafts in progress.
 

@@ -47,7 +47,7 @@ examples/
 ## Running Examples
 
 Examples require a MIND implementation that conforms to Core v1. See the reference
-implementation at [cputer/mind](https://github.com/cputer/mind).
+implementation at [star-ga/mind](https://github.com/star-ga/mind).
 
 ```bash
 # Run a MIND source file

@@ -8,5 +8,5 @@
   - [Design Notes](design/index.md)
 
 - **Links**
-  - [GitHub Repo](https://github.com/cputer/mind-spec)
-  - [MIND (core)](https://github.com/cputer/mind)
+  - [GitHub Repo](https://github.com/star-ga/mind-spec)
+  - [MIND (core)](https://github.com/star-ga/mind)
