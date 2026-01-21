@@ -53,8 +53,9 @@ Core v1 is organised into the following pillars:
     management, and cross-language interoperability.
 14. **Future Extensions** ([`future-extensions.md`](./future-extensions.md)) — forward-looking
     considerations for domain-specific extensions including neuroscience/BCI, full-stack development
-    support (API interoperability, distributed execution, data pipelines), embedded AI, and
-    safety-critical systems (informative).
+    support (API interoperability, distributed execution, data pipelines), embedded AI,
+    safety-critical systems, and the Ecosystem Evolution Roadmap (2026+) covering Python bridge
+    tooling, verified model zoo, scalable verification, and regulatory alignment kits (informative).
 15. **Package Management** ([`package.md`](./package.md)) — dependency resolution with PubGrub CDCL,
     lockfile format with integrity hashes, sparse registry protocol, SLSA provenance attestations,
     SBOM generation (SPDX/CycloneDX), and policy enforcement.
