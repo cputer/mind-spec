@@ -311,6 +311,58 @@ Implementations SHOULD:
 3. Integrate with OSV for vulnerability scanning
 4. Support policy enforcement
 
+## Reference Implementation Status (`star-ga/mind-runtime`)
+
+The reference package manager in `star-ga/mind-runtime` implements all normative requirements plus the following production features:
+
+### Implemented Modules
+
+| Module | Status | Description |
+|--------|--------|-------------|
+| `manifest.rs` | ✅ Complete | TOML parsing with serde, workspace inheritance |
+| `lockfile.rs` | ✅ Complete | Deterministic generation, integrity verification |
+| `resolver.rs` | ✅ Complete | PubGrub CDCL with all three strategies |
+| `registry.rs` | ✅ Complete | Sparse protocol, async HTTP with reqwest |
+| `workspace.rs` | ✅ Complete | Glob patterns, dependency inheritance |
+| `audit.rs` | ✅ Complete | OSV integration, severity filtering |
+| `sbom.rs` | ✅ Complete | SPDX 3.0 and CycloneDX 1.5 generation |
+| `provenance.rs` | ✅ Complete | SLSA Level 1-3, Ed25519 signing |
+
+### Production Dependencies
+
+The reference implementation uses the following production-grade crates:
+
+- `reqwest` — Async HTTP client for registry operations
+- `tokio` — Async runtime for concurrent fetches
+- `ed25519-dalek` — Cryptographic signing for provenance
+- `sha2` — SHA-256/384/512 integrity hashing
+- `serde` / `toml` — Manifest and lockfile serialization
+- `semver` — Semantic version parsing and comparison
+- `uuid` / `chrono` — Unique identifiers and timestamps
+
+### Multi-Version Isolation
+
+The resolver supports all three isolation modes:
+
+- **Unified**: Errors on any version conflict (strictest)
+- **Isolated**: Namespace isolation for diamond dependencies
+- **Hybrid**: Isolates only when necessary (default)
+
+### Security Features
+
+- **Vulnerability Scanning**: OSV database queries with configurable severity thresholds
+- **License Compliance**: SPDX expression parsing, category-based policy gates
+- **Provenance Verification**: Ed25519 signature verification, Sigstore compatibility
+- **Integrity Checking**: SRI-format hashes verified on every install
+
+### Target Platforms
+
+The package manager is tested on:
+
+- Linux (x86_64, aarch64)
+- macOS (x86_64, Apple Silicon)
+- Windows (x86_64)
+
 ## References
 
 - [PubGrub Algorithm](https://nex3.medium.com/pubgrub-2fb6470504f)
