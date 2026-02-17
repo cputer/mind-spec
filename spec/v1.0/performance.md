@@ -342,27 +342,32 @@ This section contains empirically validated benchmark results for the reference 
 | v0.2.0 | 1.77 µs | 2.84 µs | 347,000/sec | Hand-written recursive descent (15× faster) |
 | **v0.2.1** | **1.82 µs** | **2.96 µs** | **338,000/sec** | **Audit-hardened pipeline (C1-C7, -2.6%)** |
 
-**Result**: MIND is **280,000-1,900,000× faster** than PyTorch 2.0 torch.compile (cold-start).
+**Result**: MIND frontend is **35,000-176,000× faster** than PyTorch 2.10 GPU torch.compile (full pipeline), and **135,000-458,000× faster** than Mojo 0.26.1 full compilation.
 
-**Compilation Speed vs PyTorch** (February 2026, verified):
+**Compilation Speed vs PyTorch 2.10 GPU** (February 2026, verified):
 
-| Benchmark | MIND v0.2.0 | PyTorch 2.0 | Speedup |
-|-----------|-------------|-------------|---------|
-| scalar_math | 1.77 µs | 3,172 ms | ~1,792,000× |
-| small_matmul | 2.88 µs | 3,467 ms | ~1,204,000× |
-| medium_matmul | 2.82 µs | 3,599 ms | ~1,276,000× |
-| large_matmul | 2.84 µs | 3,422 ms | ~1,205,000× |
+| Benchmark | MIND v0.2.1 | PyTorch 2.10 GPU | Ratio |
+|-----------|-------------|------------------|-------|
+| scalar_math | 1.77 µs | 99 ms | ~56,000× |
+| small_matmul | 2.95 µs | 162 ms | ~55,000× |
+| medium_matmul | 2.95 µs | 109 ms | ~37,000× |
+| large_matmul | 2.95 µs | 105 ms | ~36,000× |
+| simple_mlp | 6.15 µs | 752 ms | ~122,000× |
+| conv2d | ~5 µs | 878 ms | ~176,000× |
 
-**Compilation Speed vs Mojo** (February 2026, verified):
+*Environment: Ubuntu 24.04, RTX 3080, CUDA 12.8, PyTorch 2.10.0+cu128, full cold-start (caches cleared)*
 
-| Benchmark | MIND v0.2.0 | Mojo 0.25.7 | Speedup |
-|-----------|-------------|-------------|---------|
-| scalar_math | 1.77 µs | 908 ms | ~513,000× |
-| small_matmul | 2.88 µs | 928 ms | ~322,000× |
-| medium_matmul | 2.82 µs | 915 ms | ~324,000× |
-| large_matmul | 2.84 µs | 913 ms | ~321,000× |
+**Compilation Speed vs Mojo 0.26.1** (February 2026, verified):
 
-*Environment: Ubuntu 24.04, Criterion.rs 0.5.1, PyTorch 2.0+, Mojo 0.25.7*
+| Benchmark | MIND v0.2.1 | Mojo 0.26.1 | Ratio |
+|-----------|-------------|-------------|-------|
+| scalar_math | 1.77 µs | 810 ms | ~458,000× |
+| matmul | 2.95 µs | 827 ms | ~280,000× |
+| mlp | 6.15 µs | 829 ms | ~135,000× |
+
+*Environment: Ubuntu 24.04, Mojo 0.26.1.0, pixi, `mojo build` (full LLVM compilation)*
+
+**Scope Note**: MIND measures **frontend only** (parse + typecheck + IR). PyTorch measures the full torch.compile() pipeline (FX graph + Inductor + Triton/cuBLAS). Mojo measures full LLVM compilation to native binary. Ratios reflect this scope difference.
 
 **Key insight**: MIND compilation time scales with **program complexity** (number of operations), not tensor dimensions — matmul operations compile in ~2.8 µs regardless of matrix dimensions (10×20 to 512×1024). Larger programs scale: medium_mlp (5 ops) = 6.15 µs, large_network (12 ops) = 15.49 µs. v0.2.0's hand-written recursive descent parser delivers 340,000+ compilations per second for simple programs.
 
