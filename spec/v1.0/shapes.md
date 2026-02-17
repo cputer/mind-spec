@@ -219,13 +219,19 @@ both successful and failing broadcasts.
 
 ## Reductions
 
-Core v1 distinguishes between:
+Core v1 defines two forms of reduction:
 
 - **full reductions** that reduce all axes to a scalar (rank-0);
-- **axis-aware reductions** (future extension), which remain out of scope for
-  the Core v1 baseline.
+- **axis-aware reductions** that reduce along specified axes, preserving the
+  remaining dimensions.
 
-The operator `tensor.sum_all` is a **full reduction**:
+Both forms are part of Core v1. The `Sum` and `Mean` instructions support both
+modes via the `axes` and `keepdims` parameters (see `ir.md` for the full
+instruction specification and `conformance.md` for required test coverage).
+
+### Full reductions
+
+A full reduction (`axes = []`, i.e. empty axes list) reduces all dimensions:
 
 ```text
 Input:  tensor<f32>[d_0, d_1, ..., d_{n-1}]
@@ -236,15 +242,22 @@ If the input is already a scalar (`[]`), the output is also a scalar of the
 same shape. Implementations must not silently change the rank (for example, to
 `[1]`); the scalar representation is part of the contract.
 
-Axis-parameterized reductions (for example, `sum` over a specific axis) are
-considered an extension and must follow the same error model:
+### Axis-aware reductions
+
+Axis-parameterized reductions (for example, `Sum(input, axes=[1], keepdims=false)`)
+reduce along the specified axes:
+
+- If `keepdims = false`: the reduced axes are removed from the output shape.
+  Example: `Sum([3, 4, 5], axes=[1], keepdims=false)` produces shape `[3, 5]`.
+- If `keepdims = true`: the reduced axes are replaced with size `1`.
+  Example: `Sum([3, 4, 5], axes=[1], keepdims=true)` produces shape `[3, 1, 5]`.
+
+The following error model applies to axis-aware reductions:
 
 - invalid or out-of-range axes must produce a shape error;
-- ambiguous axis specifications (duplicates, mismatched ranks) must not be
-  silently accepted.
-
-Axis-aware reductions, when added, will extend this chapter with a dedicated
-subsection.
+- duplicate axis indices must produce a shape error;
+- negative axis indices are supported and normalized via `axis = axis + rank`
+  when `axis < 0`.
 
 ## Matrix multiplication
 

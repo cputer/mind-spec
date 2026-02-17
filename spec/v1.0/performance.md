@@ -334,7 +334,7 @@ This section contains empirically validated benchmark results for the reference 
 | v0.1.7 | 26 µs | 45 µs | ~22,000/sec | Parser choice reordering (-18%) |
 | v0.1.9 | 26 µs | 45 µs | ~22,000/sec | Lib rename, Windows fixes |
 | v0.2.0 | 1.77 µs | 2.84 µs | 347,000/sec | Hand-written recursive descent (15× faster) |
-| **v0.2.1** | **1.82 µs** | **2.96 µs** | **338,000/sec** | **Audit-hardened pipeline (C1-C7, -2.6%)** |
+| **v0.2.1** | **1.77 µs** | **2.96 µs** | **338,000/sec** | **Audit-hardened pipeline (C1-C7, -2.6%)** |
 
 **Result**: MIND frontend is **35,000-176,000× faster** than PyTorch 2.10 GPU torch.compile (full pipeline), **21,200-95,100× faster** than JAX 0.9 cold-start XLA compilation, and **135,000-458,000× faster** than Mojo 0.26.1 full compilation.
 
