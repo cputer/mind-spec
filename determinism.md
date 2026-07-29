@@ -33,12 +33,12 @@ on backend / GPU / optimization level"* — does not exist in MIND.
 
 Determinism in MIND is **checkable**. Each compiled artifact embeds an evidence
 chain whose `trace_hash = SHA-256` of the canonical `mic@3` bytes. Identical
-(source, inputs, version, target) ⇒ identical `trace_hash`. `mind verify ./artifact`
+(source, inputs, version, target) ⇒ identical `trace_hash`. `mindc verify ./artifact`
 confirms it without trusting the build host. No other toolchain ships a verifiable
 determinism contract. ✅
 
 The verifier also re-derives the artifact's **floating-point contract mode**
-(`strict` / `relaxed`) directly from the hashed body — so `mind verify
+(`strict` / `relaxed`) directly from the hashed body — so `mindc verify
 --require-strict-fp ./artifact` fails closed unless the artifact was lowered on
 the strict path (no FMA-contraction, no `f32` reduction reassociation). Because
 the mode is a pure function of bytes the `trace_hash` already attests, this is
@@ -228,19 +228,34 @@ index, parallel generation is reproducible regardless of execution order, and th
 result is identical across substrates. This is the basis of MIND's
 reproducible-across-hardware `randn` (Phase 11 deterministic intrinsic). 📋
 
-### The attestation cannot lie about determinism
+### Determinism is enforced; non-determinism never leaks untraced
 
-A program *may* use a genuinely non-deterministic operation — an unseeded PRNG
-draw (`random`, `rand_uniform`) or a wall-clock / stdin read (`now`, `read_line`).
-MIND does **not** refuse to compile it; the compiler can express anything. What it
-guarantees is that the artifact's evidence chain **declares that honestly**: the
-`evidence_chain.determinism` field is *derived from the IR*, so a module that calls
-such a builtin attests `determinism: nondeterministic`, and every other module
-(including seeded `randn(shape, seed)`) attests `deterministic`. The field can
-never forge `deterministic` for a program that isn't — non-determinism is always
-**opt-in and labelled, never by accident**. `mind verify` reports the declared
-mode; a consumer that requires reproducibility rejects a `nondeterministic`
-artifact. ✅
+MIND programs are **deterministic by default** — but as a systems language MIND
+can compile *anything*, including a genuinely non-deterministic operation (an
+unseeded PRNG draw `random` / `rand_uniform`, or a wall-clock / stdin read `now` /
+`read_line`). Such a program is neither silently accepted nor silently rejected;
+non-determinism is a **traced, attested opt-in** across three layers:
+
+1. **Build gate.** Producing a runnable or attested artifact from a program that
+   calls such a builtin is **rejected fail-loud**, naming the offender and pointing
+   at the seeded `Random(seed = 42)` API — *unless* the build passes
+   `--allow-nondeterministic`. Hidden non-determinism cannot reach a shipped
+   artifact by accident.
+2. **Honest attestation.** With that flag the program compiles, and its
+   `evidence_chain.determinism` field — *derived from the IR* — declares
+   `nondeterministic`. Every deterministic module (including seeded
+   `randn(shape, seed)`) declares `deterministic`. The flag authorises the
+   *build*, never the *label*.
+3. **Verify re-derivation (tamper-proof).** The `determinism` field is a MAP-epilogue
+   key, outside the `trace_hash` anchor, so on an unsigned artifact it would be
+   forgeable. `mindc verify` **re-derives** the mode from the hashed body (exactly as
+   it re-derives the floating-point contract mode), reports that authoritative
+   value, and **fails closed** if the stored field disagrees — a forged
+   `deterministic` label cannot pass. `mindc verify --require-deterministic` fails
+   closed for a consumer that requires reproducibility.
+
+The attestation can never lie, and non-determinism is always **opt-in and
+labelled, never by accident**. ✅
 
 ---
 

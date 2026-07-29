@@ -33,7 +33,7 @@ mechanism:
 1. A per-operation **`fp.tier` IR attribute** (`strict` | `fast`) carried on
    every floating-point op inside the canonical `IRModule`, so an operation's
    determinism tier is part of the hashed IR — not build-host configuration.
-2. A **verifier invariant** — `mind verify --require-strict-fp ./artifact` — that
+2. A **verifier invariant** — `mindc verify --require-strict-fp ./artifact` — that
    re-derives the artifact's floating-point contract mode **purely from the
    hashed `mic@3` body** and fails closed unless every FP op carries
    `fp.tier=strict`.
@@ -97,7 +97,7 @@ Rules:
 
 ### 2. The verifier invariant
 
-`mind verify --require-strict-fp ./artifact` (RFC-0017 verify surface) MUST:
+`mindc verify --require-strict-fp ./artifact` (RFC-0017 verify surface) MUST:
 
 1. Recompute `trace_hash = SHA-256(canonical mic@3 bytes)` and confirm it matches
    the embedded evidence-chain `trace_hash`
