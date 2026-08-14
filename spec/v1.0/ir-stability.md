@@ -40,7 +40,7 @@ under `spec/v1.0/mic/` and `spec/mic/`:
 | `mic@1`  | `mic@1\n`    | `IRModule`       | this document                                           |
 | `mic@2`  | `mic@2\n`    | `Graph` (compat) | `spec/mic/mic2-spec.md`, deferred per RFC 0021          |
 | `mic@2.1`| `mic@2.1\n`  | `Graph` + MAP    | `spec/mic/mic2.1-spec.md` (RFC 0014 — MAP carrier)      |
-| `mic@3`  | `MIC3` magic | `IRModule` (binary) | `spec/mic/mic2.1-spec.md` §3 + RFC 0021 (steps 1–3 shipped, 4–6 in flight) |
+| `mic@3`  | `MIC3` magic | `IRModule` (binary) | `spec/mic/mic2.1-spec.md` §3 + RFC 0021 (steps 1–4 shipped, 5–6 in progress) |
 
 Per RFC 0021, `mic@3` is the **canonical binary serialisation of the
 `IRModule` data shape** that `mic@1` text serialises today; the two are
