@@ -7,6 +7,28 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.6.0] - 2026-08-14
+
+### Aligned: mindc v0.10.2 (corr2 correctness batch) + Rust-independence (RI) track
+
+- **Compiler reference bumped to mindc v0.10.2.** v0.10.2 is a correctness-hardening
+  batch (`corr2`): the signedness/width-erasure family (`u8`/`u16` intermediate-op
+  wrap, `u64` signed `compare`/`div`/`rem`/`shr`, `x as bool`), bounds/arity checks,
+  bare enum-payload patterns resolved against the scrutinee enum (`corr2/#287-F3`), a
+  `continue`-in-match-arm forward-phi fix, and the `Mind.toml` version-parity keystone
+  gate. Cardinal invariant held: **0 wrong-bytes** on every gate.
+- **Rust-independence (RI) track documented in STATUS.md.** The native-ELF backend is
+  the pure-MIND emitter (no `src/native`). Closed: mic@3 canonicality (RI-A),
+  native-ELF float + tensor/SIMD emit with zero MLIR/LLVM (RI-B), the pure-MIND host
+  driver (RI-C), and the native-ELF self-host **reproduction fixed point** (RI-E1).
+  Near-term milestone **RI-D**: `mindc build --backend native` producing a runnable ELF
+  with zero `mlir-opt`/`mlir-translate`/`clang` for the covered scalar subset,
+  fail-closed (no MLIR fallback). **Honest scope:** the default build still uses the
+  Rust + MLIR-text → `clang` pipeline; full-language native coverage, register
+  allocation, and the default-backend flip remain roadmap.
+
+---
+
 ## [1.5.0] - 2026-06-25
 
 ### Milestone: mindc v0.10.0 — native-ELF self-host fixed point closed; backend architecture pivot
