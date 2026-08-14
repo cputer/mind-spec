@@ -49,14 +49,16 @@ Implementations claiming **evidence-chain emission** (RFC 0016) MUST:
   collision audit found `mic@1` text can drop function-body semantics; supersedes the original GAP-1
   `mic@1`-text rule). Hashing on the `mic@1` textual form, on the `mic@2.x` binary form, or on any
   derivative serialisation is **non-conformant**.
-- Emit all five evidence-chain keys (`evidence_chain.determinism`, `.substrate`, `.toolchain`,
-  `.trace_hash`; `.parent` is OPTIONAL) when the chain is present.
+- Emit the RFC 0021 key set when the chain is present:
+  `evidence_chain.{determinism,schema=1,substrate,toolchain,trace_hash}` plus
+  `evidence_chain.trace_hash_kind`. `evidence_chain.parent` is OPTIONAL.
+  `evidence_chain.determinism` MUST be `"deterministic"` or `"nondeterministic"`.
 
-**Signing status.** Evidence-chain conformance today covers **emission and hash anchoring only**.
-The chain is emitted/embedded but **not cryptographically signed**; Ed25519 signing (RFC 0016
-Phase C / RFC 0017 `mindc verify` signature mode) is a future milestone and is NOT part of the
-current conformance surface. Implementations MUST NOT describe an emitted chain as "signed", and
-conformance claims MUST NOT imply signature verification is available.
+**Signing status.** Default-emit conformance is **emission + hash anchoring**
+(tamper-evident, unsigned). Opt-in signing (RFC 0016 Phase C) is shipped and is
+**not** required for this add-on. Implementations MUST NOT describe a default
+unsigned chain as "signed", and MUST NOT treat `mindc verify` passing without
+`--signer-pubkey` as authorship verification.
 
 See [`ir-stability.md`](./ir-stability.md) for the normative IR-canon contract.
 

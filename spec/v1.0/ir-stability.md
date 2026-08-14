@@ -54,9 +54,9 @@ The header `mic@1\n` MUST appear as the first non-whitespace bytes of any
 ## Evidence-chain attestation (mindc 0.7.x, RFC 0016 + RFC 0021 step 2)
 
 An `IRModule` may carry an **evidence-chain attestation** — a Metadata-
-Attachment-Pair (MAP) epilogue with the keys `evidence_chain.determinism`,
-`evidence_chain.substrate`, `evidence_chain.toolchain`, `evidence_chain.trace_hash`,
-and optionally `evidence_chain.parent`.  The MAP attaches to `mic@2.1`
+Attachment-Pair (MAP) epilogue with the RFC 0021 emit set
+`evidence_chain.{determinism,schema=1,substrate,toolchain,trace_hash[,parent]}`
+and the shipped kind key `evidence_chain.trace_hash_kind`.  The MAP attaches to `mic@2.1`
 compact IR via the MAP-carrier extension (RFC 0014) and to `mic@3` binary
 IR via the trailing `0x4D` sentinel epilogue (RFC 0021 step 2).
 

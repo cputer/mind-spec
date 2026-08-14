@@ -182,14 +182,17 @@ carries a Metadata-Attachment-Pair (MAP) epilogue with the following normative k
 
 | Key | Meaning |
 |---|---|
-| `evidence_chain.determinism` | The determinism class the artifact was built under (e.g. `byte-identical-q16` for the cross-substrate integer/Q16.16 path, or `scalar-strict-f64` for the scalar IEEE-754 no-FMA strict path — run-to-run bit-identical and verified byte-identical across x86_64 + ARM64 on real hardware) |
-| `evidence_chain.substrate` | The substrate the artifact targets (`x86_avx2`, `arm64_neon`, `cuda_sm89`, …) |
-| `evidence_chain.toolchain` | Compiler + flags identity (e.g. `mindc 0.8.1 --emit-shared`) |
+| `evidence_chain.determinism` | `"deterministic"` or `"nondeterministic"` (the latter is a refusal-to-attest marker). These are the only legal values. Substrate-class strings such as `byte-identical-q16` are **not** MAP values. |
+| `evidence_chain.schema` | Integer `1` (RFC 0021). |
+| `evidence_chain.substrate` | RFC 0014 lowering-tier id as emitted by `mindc --target` (shipped default: `cpu`). |
+| `evidence_chain.toolchain` | `mindc` version string (e.g. `0.10.2`). Not a flags dump. |
 | `evidence_chain.trace_hash` | **`SHA-256(canonical mic@3 bytes)`** — the full-fidelity binary `IRModule` (RFC 0016 GAP-1; re-anchored 2026-05-31 after a collision audit found `mic@1` text can drop function-body semantics, supersedes the original `mic@1`-text rule). Hashing on `mic@1` textual or `mic@2.x` bytes is **non-conformant.** |
-| `evidence_chain.parent` (OPTIONAL) | Reference to the parent compilation in a chain |
+| `evidence_chain.trace_hash_kind` | `"mic3-bytes"` on current artifacts. |
+| `evidence_chain.parent` (OPTIONAL) | 32-byte `trace_hash` of the predecessor artifact. Absent on a root. |
 
-This provides cryptographic proof that the compiled IR was produced from a specific source by a
-specific toolchain on a specific substrate — without trusting the builder. See
+RFC 0021 emit set: `evidence_chain.{determinism,schema=1,substrate,toolchain,trace_hash[,parent]}`.
+The chain is **tamper-evident**, not a signed authorship proof. Default emit is unsigned
+(`signature: absent`). Opt-in signing is additive (RFC 0016 Phase C). See
 [`ir-stability.md`](./ir-stability.md) for the normative carrier contract.
 
 ## Loading Sequence

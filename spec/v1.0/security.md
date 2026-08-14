@@ -104,19 +104,22 @@ Separately, **scalar** IEEE-754 `f64`/`f32` arithmetic (`+ − × ÷ √`) is lo
 - Binary builds MAY vary due to timestamps or debug info but MUST have identical runtime semantics
 
 **Compile-time evidence chains (RFC 0016)**:
-- Implementations MAY emit an **embedded (emitted, not yet cryptographically signed)** evidence-chain
+- Implementations MAY emit an **embedded, tamper-evident** evidence-chain
   MAP epilogue on the compiled IR carrying
-  `evidence_chain.{determinism, substrate, toolchain, trace_hash}` and an optional `parent`
+  `evidence_chain.{determinism,schema=1,substrate,toolchain,trace_hash[,parent]}`
+  and the shipped kind key `evidence_chain.trace_hash_kind`
 - The `trace_hash` MUST anchor on the canonical `mic@3` bytes — `trace_hash = SHA-256(canonical
   mic@3 bytes)`, the full-fidelity binary `IRModule` (RFC 0016 GAP-1; re-anchored 2026-05-31 after a
   collision audit found `mic@1` text can drop function-body semantics, supersedes the original GAP-1
   `mic@1`-text rule); hashing on the `mic@1` textual or `mic@2.x` binary form is non-conformant
-- **Signing status**: the chain is currently **emitted/embedded but UNSIGNED**. Cryptographic
-  Ed25519 signing of the evidence chain is the next milestone (RFC 0016 Phase C) and is **not yet
-  shipped** — until then, refer to it as an *emitted/embedded* evidence chain, never a *signed* one
-- Once signing lands, the chain becomes the load-bearing primitive for cryptographic proof that a
-  compiled artifact was produced from a specific source by a specific toolchain on a specific
-  substrate — without trusting the builder
+- **Signing status**: default emit is **unsigned** (`signature: absent`). Opt-in
+  Ed25519 / ML-DSA-65 / hybrid signing (RFC 0016 Phase C) is **shipped** and
+  enabled only via a key-seed env var — never signed-by-default. Unsigned
+  artifacts stay byte-identical. Refer to the default chain as *tamper-evident*,
+  never as a *signed-by-default* chain
+- A signed artifact can prove authorship relative to a pinned pubkey
+  (`mindc verify --signer-pubkey`). An unsigned artifact only proves the
+  `trace_hash` still matches the hashed mic@3 body
 
 **Dependency pinning**:
 - Projects SHOULD use lock files (e.g., `Cargo.lock`) to pin exact dependency versions
