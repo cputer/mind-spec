@@ -49,7 +49,7 @@ Generated headers include:
 
 #### Primitive types
 
-The reference compiler (v0.10.0) currently exports these primitive types via FFI:
+The reference compiler (v0.10.2) currently exports these primitive types via FFI:
 
 | MIND Type | C Type | Size | Alignment | Status |
 |-----------|--------|------|-----------|--------|
