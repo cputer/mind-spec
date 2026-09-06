@@ -77,6 +77,42 @@ The type checker participates directly in Core IR construction:
   incompatible shapes, or undeclared symbols before emitting IR. This aligns the surface-language
   diagnostics with the invariants described in [Core IR](./ir.md#verification).
 
+## Slice call implementation boundary
+
+> **Compiler integration update, pending release.** The `std-surface` source
+> implementation under review defines a bounded dynamic-array-to-slice call
+> ABI. This describes the pending integration; it does not change the
+> published v0.10.2 artifact.
+
+A compatible `array<T>` value or array literal MAY be passed to `&[T]` or
+`&mut [T]` parameters. Both use the existing `std.vec` Option-C dynamic-array
+handle layout, an opaque handle to the `[addr, len, cap]` record. A mutable
+slice parameter accepts an `array<T>` value or a mutable slice value; a
+read-only parameter also accepts a mutable slice value. Read-only slices
+permit indexing, `get`, and length queries. Mutable slices add indexed
+assignment and `set`; ownership operations such as `push`, `free`, and
+capacity access are unavailable through either slice form. Inferred aliases
+retain their slice capabilities across branches, loop iterations, and loop
+transfers, including `break` and `continue` paths.
+
+The compiler MUST refuse an unproven or incompatible call-boundary layout
+with `E2032` before artifact emission. This includes an unsupported element
+form, an explicit slice-typed local binding, a scalar/map/opaque integer
+argument, an incompatible array, and a slice or array result that is not
+proven on every required path. The current ABI guard refuses floating-point,
+tensor, fixed-array, and nested-slice element layouts. Opaque integer and map
+handles cannot establish slice provenance merely by annotation.
+
+Capability erasure, read-only mutation, borrowed values passed to non-slice
+parameters, borrowed values returned through non-slice returns, and
+slice-containing struct fields MUST produce `E2033`. A declared slice return
+may preserve a compatible slice capability. General lifetime and
+alias-exclusivity analysis remains outside this implementation. These limits
+are separate from the general byte-slice design in [Future Extensions](./future-extensions.md#systems-programming-primitives).
+
+The pending integration's executable coverage is the compiler-side
+`slice_call_abi_run` test; it is not yet a shipped conformance artifact.
+
 ## Traits and generics
 
 > **Implementation status (v0.10.x, honest boundary).** The rules in this section specify the

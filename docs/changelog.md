@@ -7,6 +7,20 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [Unreleased]
+
+### Documentation alignment: issue #234 slice-call ABI
+
+- Added the pending `std-surface` `array<T>`-to-`&[T]` / `&mut [T]` call
+  boundary to the normative type and error chapters, including the Option-C
+  `[addr, len, cap]` handle, supported operations, and E2032/E2033 split.
+- Clarified that slice capability flow is checked through implemented branch
+  and loop joins, while general lifetime and mutable-alias exclusivity analysis
+  remain future work.
+- The corresponding compiler integration is pending; this entry does not
+  represent a shipped compiler artifact, compiler-version change, or
+  performance-number change.
+
 ## [1.6.0] - 2026-08-14
 
 ### Aligned: mindc v0.10.2 (corr2 correctness batch) + Rust-independence (RI) track

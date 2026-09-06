@@ -106,6 +106,32 @@ Type errors occur during type checking and type inference.
 - **Required context**: function name, expected arity, actual arity, call location
 - **Example**: `E2007: Function 'matmul' expects 2 arguments, found 3 at line 18, column 12`
 
+### E2032: Unsupported slice call ABI
+
+- **Implementation status**: pending compiler integration; see the
+  [slice call boundary](./types.md#slice-call-implementation-boundary).
+- **Trigger**: unsupported slice layout, a call argument without proven
+  compatible dynamic-array provenance, or a slice/array result that is not
+  proven on every required path. Explicit slice-typed local bindings are also
+  outside the current lowering boundary.
+- **Required context**: the affected declaration, argument, or result; the
+  unsupported layout or missing provenance; and a source span. The compiler
+  refuses before artifact emission.
+
+### E2033: Borrowed slice capability violation
+
+- **Implementation status**: pending compiler integration.
+- **Trigger**: read-only mutation, ownership operations, capability erasure,
+  escape through a non-slice parameter or return, or a slice-containing
+  aggregate or struct field.
+- **Required context**: the binding or operation, the capability being lost or
+  operation being attempted, and its source span. A declared slice return may
+  preserve a compatible slice capability. The compiler preserves borrowed
+  capabilities through branch and loop joins.
+
+The pending checker does not provide general lifetime inference or mutable-alias
+exclusivity analysis; those guarantees remain future work.
+
 ## E3xxx: Shape errors
 
 Shape errors occur during shape inference, broadcasting, or shape validation.

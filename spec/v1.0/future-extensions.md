@@ -44,8 +44,12 @@ document may present them as shipped:
 - **Full generics** — today's surface is a bounded slice: a single type parameter over scalar
   types. Multi-parameter generics, generic containers (`map<K, V>`-style), and `where`-clause
   trait bounds are future extensions.
-- **Slices** (`&[T]` / byte slices) — stubbed; see the byte-slice discussion under
-  [Systems Programming Primitives](#systems-programming-primitives).
+- **Slice call ABI** (`&[T]` / `&mut [T]`) — issue #234 is pending compiler
+  integration; see [its precise limits](./types.md#slice-call-implementation-boundary).
+  The bounded `std.vec` handle boundary does not provide general lifetime or
+  mutable-alias exclusivity checking.
+- **General byte-slice type** — remains deferred; see the byte-slice discussion
+  under [Systems Programming Primitives](#systems-programming-primitives).
 - **Full dynamic collections** — the shipped `std.vec` / `std.string` / `std.map` are
   region-allocator-backed with documented gaps (non-mutating push, insert-only map); full
   `Vec`/`String`/`HashMap` equivalents (removal, in-place update, hashing index) are roadmap
@@ -523,8 +527,10 @@ These primitives extend MIND from a tensor-only language into one capable of exp
 > implementation: `enum` declarations (including payload variants and `match`), `const`
 > declarations, and narrow integer types (`i32`/`u32`/`bool` lowering in every context, with
 > cross-substrate shift-count determinism). The prose below is retained as the original design
-> record. Item 4 (byte-slice type) remains **deferred/stubbed**; byte-string literals (`b"…"`)
-> have landed, but a general slice type has not.
+> record. Item 4 (general byte-slice type) remains deferred. Byte-string literals
+> (`b"…"`) have landed; the separate issue #234 slice-call ABI remains pending
+> compiler integration and does not provide general byte-slice lifetime or
+> alias-exclusivity semantics.
 
 ### Proposed Extensions
 
