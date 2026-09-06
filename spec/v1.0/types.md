@@ -45,6 +45,20 @@ applicable rule. Selected core rules include:
 - **Let binding**: if `Γ ⊢ e1 : T1` and `Γ, x : T1 ⊢ e2 : T2` then `Γ ⊢ let x = e1 in e2 : T2`.
 - **Function abstraction**: if `Γ, x1 : T1, ..., xn : Tn ⊢ e : U` then `Γ ⊢ fn(x1 : T1, ..., xn : Tn) -> U { e } : (T1, ..., Tn) -> U`.
 
+### Fixed-array literal cardinality
+
+An array literal initializing an explicitly annotated `let` or `const` binding
+of type `[T; n]` MUST contain exactly `n` elements. This rule applies at every
+lexical depth, including function, branch, and loop bodies. Parentheses around
+the literal do not change its cardinality. When `T` is itself a fixed-array
+type, each nested array literal MUST satisfy its corresponding extent.
+
+A cardinality mismatch MUST be rejected during static checking. The diagnostic
+MUST identify the literal and report both the required and actual element
+counts; execution failure at a later call site is not an adequate substitute.
+This rule concerns literal cardinality; nonliteral initializers remain subject
+to the ordinary type compatibility rules.
+
 A comprehensive derivation catalogue is maintained in the implementation notes
 ([informative](https://github.com/star-ga/mind/blob/main/docs/type-system.md)).
 

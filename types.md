@@ -29,6 +29,20 @@ Tensors are the core primitive, defined by a data type and a shape.
 let image: tensor<f32[3, 224, 224]>;
 ```
 
+## Fixed-size arrays
+
+`[T; n]` declares an array with exactly `n` elements of type `T`:
+
+```mind
+let samples: [i64; 4] = [1, 2, 3, 4];
+```
+
+An explicit `let` or `const` annotation requires a literal with the same
+element count, including inside functions, branches, and loops. A three- or
+five-element literal cannot initialize `[i64; 4]`. Parenthesized and nested
+literals follow the same rule. See the
+[normative cardinality rule](spec/v1.0/types.md#fixed-array-literal-cardinality).
+
 ## Structs
 User-defined compound types.
 ```rust
