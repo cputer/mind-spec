@@ -76,10 +76,14 @@ Type errors occur during type checking and type inference.
 - **Required context**: expression location, expected type, actual type
 - **Example**: `E2001: Type mismatch at line 15, column 10: expected 'f32', found 'i32'`
 
-### E2002: Undefined variable
-- **Trigger**: Reference to undeclared variable
-- **Required context**: variable name, source location
-- **Example**: `E2002: Undefined variable 'x' at line 8, column 5`
+### E2002: Unresolved name or qualified owner
+- **Trigger**: reference to an undeclared variable, or to a qualified type or
+  enum variant whose owner is unknown, unimported, ambiguous, or does not
+  export that declaration. Recognising a qualified path during parsing does
+  not establish semantic module ownership.
+- **Required context**: unresolved name or qualified path and source location
+- **Examples**: `E2002: Undefined variable 'x' at line 8, column 5`;
+  `E2002: unknown module-qualified type \`config.Mode\``
 
 ### E2003: Cannot infer type
 - **Trigger**: Type inference fails due to insufficient constraints
@@ -131,6 +135,38 @@ Type errors occur during type checking and type inference.
 
 The pending checker does not provide general lifetime inference or mutable-alias
 exclusivity analysis; those guarantees remain future work.
+
+### E2300: Collection mutation in expression position
+
+- **Implementation status**: pending compiler integration.
+- **Trigger**: a mutating method on a tracked collection appears in an
+  expression position rather than as a supported top-level owner update. This
+  includes nested expressions, call arguments, conditions, match values or
+  guards, and assignment of an owner-returning mutation to a different
+  binding. The same-binding form `xs = xs.push(value)` and its bare-statement
+  rewrite are allowed by this rule; their arguments are still checked for
+  nested violations. Separate result-type rules still apply, so assigning the
+  scalar result of `set` back to an array is `E2032`.
+- **Required context**: the mutating call, its collection receiver, a source
+  span, and guidance to use an owner-preserving statement or same-binding
+  update. The decision is type-aware, so an equally named user-defined method
+  on a non-collection receiver is not refused.
+- **Check/build contract**: checking and artifact-producing builds MUST refuse
+  the same source with `E2300`; a refused build MUST terminate as a user error
+  and leave no artifact.
+
+### E2301: Non-final enum-variant binding collision
+
+- **Implementation status**: pending compiler integration.
+- **Trigger**: an unguarded bare-identifier match arm occurs before the final
+  arm and its identifier collides with a registered enum variant. Such an arm
+  is neither a qualified discriminant test nor a valid final catch-all.
+- **Required context**: the colliding identifier and source span, with guidance
+  to qualify the variant, rename the binding, or move a catch-all binding to
+  the final arm. A wildcard arm remains valid under first-match semantics.
+- **Check/build contract**: checking and artifact-producing builds MUST refuse
+  the same source with `E2301`; a refused build MUST terminate as a user error
+  and leave no artifact.
 
 ## E3xxx: Shape errors
 

@@ -464,8 +464,18 @@ so this resolution is the default behaviour of a shipped `mindc`; building with
   `addr`, `len`, `cap`. The reference implementation (mindc v0.10.0,
   `std/vec.mind`) ships: `vec_new`, `vec_push`, `vec_get`, `vec_set`,
   `vec_len`, `vec_cap`, `vec_addr`, `vec_free`, `vec_zeroed`. `vec_push` is
-  non-mutating today (it returns a fresh `Vec`); an in-place push lands once
-  cross-fn `&mut` mutation ships.
+  functional at the value level today: it may update or reallocate the backing
+  store and returns the replacement `Vec` owner. `vec_set` updates existing
+  storage and returns the scalar status from the store operation.
+
+  > **Compiler integration update, pending release.** The source surface under
+  > review maps owned `array<T>` mutation onto these two result contracts. A
+  > `push` must be a bare statement or be assigned back to the same owner;
+  > unrebindable uses produce `E2300`. A `set` is valid as a statement, but its
+  > scalar result cannot replace the array owner (`E2032`). Mutable borrowed
+  > slices may use `set` as a statement; borrowed slices cannot use ownership
+  > operations such as `push` (`E2033`). This note does not change the shipped
+  > compiler surface.
 
   > **Planned (not yet shipped).** A tail-removing `vec_pop` is on the roadmap
   > but is **not** present in the reference implementation as of v0.10.0.

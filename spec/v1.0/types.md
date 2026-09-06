@@ -77,6 +77,40 @@ The type checker participates directly in Core IR construction:
   incompatible shapes, or undeclared symbols before emitting IR. This aligns the surface-language
   diagnostics with the invariants described in [Core IR](./ir.md#verification).
 
+## Module-qualified type ownership
+
+> **Compiler integration update, pending release.** The project-module source
+> implementation under review resolves qualified imported types and enum
+> variants as described here. This does not change the published v0.10.2
+> artifact.
+
+For a manifest project, the defining source module owns each enum, struct, and
+type alias. A qualifier MUST resolve to the current module or to exactly one
+imported module, and a type referenced from another module MUST be exported by
+that owner. The terminal import alias (`defs.Color`), full module path
+(`nested.defs.Color`), and crate-qualified path (`crate.nested.defs.Color`) all
+retain the same defining owner. The rule applies recursively in reference,
+fixed-array, tuple, generic-argument, raw-pointer, and external-function type
+positions. Same-named types in different modules remain distinct.
+
+An unknown, unimported, non-exported, or ambiguous owner MUST be refused with
+`E2002` during both checking and artifact-producing builds. A refused build
+MUST leave no artifact.
+
+Inline `module name { ... }` blocks are transparent syntax containers in the
+current parser. The parser accepts and preserves dotted type names and
+qualified enum-pattern paths inside them, but an inline name does not create a
+module-table owner. A project loader instead assigns the enclosing source
+file's canonical module path and flattens a transparent block's declarations
+into that file. Therefore parsing `config.Mode` in an inline block does not
+establish `config` as a semantic owner; compiling that source without a
+manifest-resolved module MUST refuse the qualified type and variants with
+`E2002`.
+
+The pending integration's executable coverage is the compiler-side
+`qualified_enum_run` test together with the parser and single-source refusal
+controls in `parse_match_and_ref`.
+
 ## Slice call implementation boundary
 
 > **Compiler integration update, pending release.** The `std-surface` source
@@ -110,8 +144,24 @@ may preserve a compatible slice capability. General lifetime and
 alias-exclusivity analysis remains outside this implementation. These limits
 are separate from the general byte-slice design in [Future Extensions](./future-extensions.md#systems-programming-primitives).
 
+For an owned `array<T>`, `push` returns the replacement owner handle. The
+pending compiler accepts an explicit same-binding update such as
+`xs = xs.push(value)` and rewrites a bare statement `xs.push(value)` to that
+same owner-preserving form. A collection mutation used where its replacement
+handle cannot be rebound, including assignment to a different binding or a
+nested expression, MUST be refused with `E2300`. This rule follows the
+receiver's collection type; a user-defined method with the same name on a
+non-collection value is unaffected.
+
+`set` has a different result contract: it updates existing storage and returns
+a scalar status. Consequently `xs.set(index, value)` is valid as a statement
+for an owned array or mutable slice, while `xs = xs.set(index, value)` cannot
+replace an owned array and MUST be refused with `E2032`. Neither read-only nor
+mutable borrowed slices provide `push`; attempts MUST be refused with `E2033`.
+
 The pending integration's executable coverage is the compiler-side
-`slice_call_abi_run` test; it is not yet a shipped conformance artifact.
+`slice_call_abi_run` and `lowering_refusal_diagnostics_run` tests; they are not
+yet shipped conformance artifacts.
 
 ## Traits and generics
 

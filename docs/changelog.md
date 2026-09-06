@@ -9,7 +9,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Documentation alignment: issue #234 slice-call ABI
+### Documentation alignment: pending compiler contracts
 
 - Added the pending `std-surface` `array<T>`-to-`&[T]` / `&mut [T]` call
   boundary to the normative type and error chapters, including the Option-C
@@ -17,9 +17,19 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Clarified that slice capability flow is checked through implemented branch
   and loop joins, while general lifetime and mutable-alias exclusivity analysis
   remain future work.
-- The corresponding compiler integration is pending; this entry does not
-  represent a shipped compiler artifact, compiler-version change, or
-  performance-number change.
+- Documented manifest-owned qualified imported types, including export and
+  import visibility, owner-preserving aliases, and `E2002` refusal. Inline
+  module names remain parser-only syntax and do not establish semantic
+  ownership; project ownership comes from the enclosing source file.
+- Added the pending `E2300` and `E2301` check/build refusal contracts. Both
+  require structured user errors and no artifact, while preserving valid
+  owner-rebinding collection updates and final catch-all patterns.
+- Distinguished the owned-array `push` replacement-handle contract from the
+  scalar status returned by `set`, and retained the borrowed-slice capability
+  boundary.
+- The corresponding compiler integrations remain pending and unpromoted; this
+  entry does not represent a shipped compiler artifact or compiler-version
+  change.
 
 ## [1.6.0] - 2026-08-14
 
