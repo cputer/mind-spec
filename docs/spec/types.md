@@ -17,16 +17,27 @@ limitations under the License.
 ﻿# Type System
 
 > **Status:** Draft  
-> **Last updated:** 2025-11-07  
+> **Last updated:** 2026-09-06
 > **MIND Spec Section**
 
 ---
 
-### Overview
-Briefly describe what this section covers.
+### Type checking
 
-### Details
-Add your technical content here.
+MIND is statically typed. The normative type formation and compatibility rules
+are maintained in the [versioned type-system specification](https://github.com/star-ga/mind-spec/blob/main/spec/v1.0/types.md).
+
+### Fixed-array literals
+
+An explicit `let` or `const` binding of type `[T; n]` requires an array literal
+with exactly `n` elements. This requirement applies inside functions, branches,
+and loops as well as at module level. Parentheses do not suppress the check;
+nested fixed-array literals must match every declared extent.
+
+For example, `[1, 2, 3, 4]` has the required cardinality for `[i64; 4]`, while
+three or five elements do not. A mismatch must produce a static diagnostic at
+the literal with the expected and actual counts. Nonliteral initializers remain
+subject to the ordinary type compatibility rules.
 
 ---
 
