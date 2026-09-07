@@ -11,6 +11,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Documentation alignment: pending compiler contracts
 
+- Publish the versioned specification with the documentation site. Pages now
+  uploads the generated artifact containing the canonical chapters, so language
+  and conformance navigation reaches the same files maintained in the repository.
 - Specified source-test discovery, exact imported module ownership, exported
   type validation, dependency standard-library capture, and isolated lexical
   globals. Distinguished interpreter digest verification from native execution,

@@ -5,7 +5,7 @@
  * The published site is the Docsify documentation tree under `docs/`, deployed
  * to GitHub Pages by `.github/workflows/pages.yml`. Docsify renders Markdown in
  * the browser from CDN-hosted assets, so the "build" is a deterministic copy of
- * the publishable `docs/` tree into `dist/`. No external dependencies, no
+ * the publishable `docs/` tree and versioned `spec/` into `dist/`. No external dependencies, no
  * network access, and byte-identical output on every run.
  */
 
@@ -38,6 +38,15 @@ fs.mkdirSync(outDir, { recursive: true });
 
 // Copy the publishable Docsify tree verbatim.
 fs.cpSync(srcDir, outDir, { recursive: true });
+
+// The navigation links to spec/v1.0 and spec/mic. These chapters live outside
+// docs/ so there is a single authoritative copy; include them in the artifact
+// instead of publishing navigation whose targets are absent.
+const normativeDir = path.join(repoRoot, 'spec');
+if (!fs.existsSync(normativeDir) || !fs.statSync(normativeDir).isDirectory()) {
+  fail('spec/ is missing — refusing to publish without the normative chapters');
+}
+fs.cpSync(normativeDir, path.join(outDir, 'spec'), { recursive: true });
 
 let fileCount = 0;
 const walk = (dir) => {
