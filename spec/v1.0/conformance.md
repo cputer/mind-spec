@@ -74,6 +74,42 @@ For the profile(s) an implementation claims:
 - **Deterministic diagnostics**: verification failures, unsupported features, and backend selection
   errors MUST be reported via deterministic, stable diagnostics.
 
+## Source test execution and module scope
+
+> **Compiler integration update, pending release.** The `mindc test`
+> implementation in compiler commit `eedcfb2c` implements the bounded source
+> test behavior below. This does not promote the published compiler artifact
+> or establish native-backend conformance.
+
+A source test runner MUST discover module-level test functions inside
+transparent inline module blocks in depth-first source order. Function-local
+test declarations MUST NOT enter that inventory. Multiple module-level
+definitions with the same name are ambiguous when any is a test and MUST be
+refused. A run that discovers no tests MUST NOT report successful verification.
+
+For builds with project-import support, each imported function, constant and
+qualified type MUST resolve to the exact defining module selected by the
+manifest source closure. An ambiguous, missing or non-exported symbol MUST
+fail test preparation rather than bind to an unrelated declaration with the
+same short name. Bundled standard-library imports use explicit `std.*` paths;
+dependencies' standard-library imports are part of the captured evaluator
+closure. A bare import names a project module and does not imply `std.*`.
+
+Functions MUST read initialized module-level bindings from their defining
+module. Caller-local bindings MUST NOT supply a missing global or override
+the callee's module state. Arguments are evaluated in the caller's context,
+then bound in the callee. A scalar argument replacing a tensor-named parameter
+MUST NOT retain metadata from the shadowed tensor. On builds supporting
+module-level loops, updates made by a loop MUST remain visible to helpers
+called from that loop and after it completes.
+
+Each test evaluation MUST isolate its mutable evaluator state from other
+tests, including when workers are reused after an error. The reference
+controls are `mindc_test_imports` and `mindc_test_nested_modules`. Their
+standard-library digest test compares all expected digest bytes through a
+project dependency; a passing digest calculation does not establish signing,
+authorization, native artifact execution or cross-host byte identity.
+
 ## Conformance verification
 
 Conformance is evaluated by executing the published **golden test corpus** distributed with the

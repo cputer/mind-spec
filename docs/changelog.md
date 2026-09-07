@@ -11,6 +11,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Documentation alignment: pending compiler contracts
 
+- Specified source-test discovery, exact imported module ownership, exported
+  type validation, dependency standard-library capture, and isolated lexical
+  globals. Distinguished interpreter digest verification from native execution,
+  signature verification and compiler promotion. Compiler reference: `eedcfb2c`.
 - Clarified inferred struct-literal bindings, same-struct reassignment and
   preservation of declared integer widths. Documented the confident numeric
   scalar replacement refusal (`E2026`) and retained genuine scalar narrowing
