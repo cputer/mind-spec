@@ -11,6 +11,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Documentation alignment: pending compiler contracts
 
+- Clarified inferred struct-literal bindings, same-struct reassignment and
+  preservation of declared integer widths. Documented the confident numeric
+  scalar replacement refusal (`E2026`) and retained genuine scalar narrowing
+  errors. Shared-library regression evidence does not promote native-ELF
+  coverage or full structural inference.
 - Added the pending `std-surface` `array<T>`-to-`&[T]` / `&mut [T]` call
   boundary to the normative type and error chapters, including the Option-C
   `[addr, len, cap]` handle, supported operations, and E2032/E2033 split.

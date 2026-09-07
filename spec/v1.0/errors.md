@@ -110,6 +110,18 @@ Type errors occur during type checking and type inference.
 - **Required context**: function name, expected arity, actual arity, call location
 - **Example**: `E2007: Function 'matmul' expects 2 arguments, found 3 at line 18, column 12`
 
+### E2026: Numeric scalar used as a known struct
+
+- **Implementation status**: pending compiler integration for inferred
+  bindings and reassignment; see [struct literal bindings](./types.md#struct-literal-bindings).
+- **Trigger**: a provably numeric scalar is used where a locally declared
+  struct is required, including replacement of a known struct binding.
+- **Required context**: the binding, declared struct name and offending value
+  span. Construct a struct value instead. A same-struct replacement must not
+  be diagnosed as scalar narrowing.
+- Unknown types do not establish known struct identity. General structural
+  compatibility checking remains outside this diagnostic's implemented scope.
+
 ### E2032: Unsupported slice call ABI
 
 - **Implementation status**: pending compiler integration; see the

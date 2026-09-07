@@ -60,6 +60,25 @@ Implementations MUST support bidirectional type inference:
 Inference relies on unification with occurs checks. Implementations SHOULD emit informative error
 messages when inference requires additional annotations.
 
+### Struct literal bindings
+
+A literal of a declared struct denotes that struct, including when its local
+binding omits an annotation. Integer field initializers such as `0` MUST NOT
+turn the aggregate binding into an `i32` scalar. Replacing a mutable binding
+with a value of the same struct type MUST NOT produce an integer-narrowing
+diagnostic merely because the replacement comes from a function.
+
+The declared field widths govern field values. A genuine implicit `i64` to
+`i32` scalar assignment still requires the narrowing diagnostic. A known
+struct binding cannot be replaced with a numeric scalar; the implemented
+confident-scalar check reports `E2026`. A fresh lexical binding shadows the
+previous binding and does not inherit its struct identity.
+
+Implementation status: pending compiler integration. The regression exercises
+check/build agreement, full-width values and deterministic shared-library
+emission. It does not promote full structural type inference or native-ELF
+coverage beyond the independently verified backend subset.
+
 ### Core IR integration
 
 The type checker participates directly in Core IR construction:
