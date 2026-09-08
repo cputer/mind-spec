@@ -9,6 +9,16 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added — E6009 compiler materialization refusal
+
+- Reserved `E6009` for deterministic compiler-side materialization refusal,
+  while preserving `E6002` as Backend unavailable. This is an additive Core v1
+  catalog change targeted for specification 1.7.0; it does not declare that
+  release or promote an unreleased compiler artifact.
+- Required a non-zero refusal and no partial runnable artifact. Accepted source
+  may still be refused when an aggregate shape has no runnable lowering
+  representation, so `E6009` is not classified as a type error.
+
 ### Documentation alignment: pending compiler contracts
 
 - Publish the versioned specification with the documentation site. Pages now

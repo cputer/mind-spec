@@ -28,7 +28,7 @@ Core v1 defines six primary error categories:
 3. **Shape errors (E3xxx)**: broadcasting failures, dimension mismatches, invalid shapes
 4. **Verification errors (E4xxx)**: IR verification failures, SSA violations
 5. **Autodiff errors (E5xxx)**: differentiation failures, unsupported operations
-6. **Runtime errors (E6xxx)**: execution failures, backend unavailability, resource errors
+6. **Runtime and artifact-production errors (E6xxx)**: execution failures, backend unavailability, resource errors, compiler materialization refusal
 
 Each error code follows the pattern `E[category][number]` where category is 1-6 and number is a
 three-digit identifier.
@@ -322,9 +322,9 @@ Autodiff errors occur during gradient computation.
 - **Required context**: ValueId, type
 - **Example**: `E5005: Cannot differentiate with respect to i32 tensor at %10`
 
-## E6xxx: Runtime errors
+## E6xxx: Runtime and artifact-production errors
 
-Runtime errors occur during execution on a backend.
+E6xxx errors occur during backend execution or while producing a runnable artifact.
 
 ### E6001: Out-of-bounds index
 - **Trigger**: Index or Gather operation accesses invalid position
@@ -365,6 +365,17 @@ Runtime errors occur during execution on a backend.
 - **Trigger**: Device-specific error (GPU kernel failure, driver error)
 - **Required context**: device, operation, device-specific error code
 - **Example**: `E6008: GPU kernel failed for Conv2d: CUDA error 77 (illegal memory access)`
+
+### E6009: Compiler materialization refusal
+- **Trigger**: Compiler-side aggregate expansion exceeds a deterministic
+  materialization limit, its accounting overflows, or an accepted aggregate
+  operation has no valid representation in the runnable lowering ABI (including
+  a nested `[Struct; N]` element-field receiver)
+- **Required context**: the exceeded resource and attempted/limit values, or
+  the unsupported/invalid lowering operation and source location
+- **Artifact contract**: Compilation MUST terminate with a non-zero status and
+  MUST NOT publish a partial runnable artifact
+- **Example**: `E6009: Compiler materialization payload 2097160 bytes exceeds limit 2097152`
 
 ## Diagnostic requirements
 
@@ -446,6 +457,8 @@ The reference compiler implements the following error codes:
 | E4002 | Autodiff    | Autodiff requires --func argument        |
 | E4003 | Autodiff    | Autodiff feature not enabled             |
 | E5001 | Autodiff    | Unsupported operation for autodiff       |
+| E6002 | Backend     | Requested backend unavailable             |
+| E6009 | Materialize | Compiler materialization refusal          |
 
 **Note**: The reference implementation uses E2xxx for both type AND shape errors (combining
 the spec's E2xxx and E3xxx categories). Most error codes in the spec are reserved for future

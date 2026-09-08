@@ -228,7 +228,11 @@ For **CPU baseline** conformance, implementations MUST pass tests covering:
 
 - Autodiff gradients: forward and backward for all differentiable operations
 
-- Error codes: at least one test per E-code from E1001-E6008 in errors.md
+- Error codes: at least one test per E-code cataloged in errors.md, including E6009
+
+- Materialization tests: E6009 for a deterministic limit and an unrepresentable
+  aggregate lowering operation; each refusal exits nonzero and leaves no
+  runnable artifact
 
 - Edge cases: rank-0 scalars, empty axes (full reduction), single-element tensors
 
