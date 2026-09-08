@@ -16,11 +16,12 @@ limitations under the License.
 
 # MIC@3 `0x04` implementation status
 
-**Status: unreleased proposal.** The reference-compiler work is an unpublished
-candidate, and this page is an informative cross-reference rather than a
-versioned wire specification. The [compiler draft for candidate `75f82e03`](https://github.com/star-ga/mind/blob/75f82e03/docs/mic3-v04-draft.md)
-is the proposal being reviewed; the link is provisional until that candidate is
-landed and root updates it to the final public revision.
+**Status: unreleased implementation draft.** The public reference-compiler
+candidate is [PR #256](https://github.com/star-ga/mind/pull/256), currently at
+[`66f43a6b`](https://github.com/star-ga/mind/commit/66f43a6bed42709047682b28cef6bd8e27118c7b)
+against `main`. This page is an informative cross-reference rather than a
+versioned or normative wire specification; the v04 wire contract, shared
+golden vectors, and release status remain unfrozen.
 
 The proposed first stage carries canonical scalar IR together with owner-
 qualified record schemas, fixed or dynamic array descriptors, function
@@ -29,6 +30,13 @@ value types. It is intended to preserve logical identity supplied by the
 compiler. It does not authorize a physical record ABI or infer identity from
 host paths, source order, or scalar handles.
 
+The public candidate provides checked v04 admission and decoder validation. It
+bounds input size, nesting, allocation, and semantic descriptors, stages
+declarations before cumulative validation, and rejects malformed or unsupported
+content. Its checked evidence path applies the size limit to the complete body
+plus MAP artifact before publication. These are implementation checks for the
+draft candidate and do not establish a released wire contract.
+
 The proposal is limited to a scalar instruction subset. Standard-surface and
 tensor instructions, source-to-native aggregate execution, pure-MIND codec
 parity, cross-profile or cross-substrate identity, a frozen protocol, and
@@ -36,8 +44,8 @@ promotion remain separate work. A successful scalar-stage transport result is
 not evidence that those dependencies are complete.
 
 Existing `mic@3` versions, including their `0x03` compatibility behavior, remain
-unchanged. No v04 bytes, shared vectors, reader/writer contract, or normative
-Core v1 requirement is established by this status page. Any future v04
+unchanged. This status page establishes no normative v04 byte contract, shared
+vectors, reader/writer contract, or Core v1 requirement. Any future v04
 specification must be accepted separately and must define its own strict
 version, malformed-input, resource, canonicality, and backward-compatibility
 rules before publication.
