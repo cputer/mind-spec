@@ -35,6 +35,9 @@ The E6xxx catalog distinguishes two current compilation refusals:
   The current reference profile executes fixed-array struct fields whose cells
   are `i64` or `f64`; nested `[Struct; N]` element-field receivers remain
   unsupported and must receive the same structured refusal.
+- `E6010` means a `Mind.toml [exports] c_abi` entry failed manifest validation;
+  it remains an ordinary user configuration error and cannot represent backend
+  capability.
 
 An `E6009` refusal terminates compilation with a non-zero status and does not
 publish a partial runnable artifact. It does not imply that the source is

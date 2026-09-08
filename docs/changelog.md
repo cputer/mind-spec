@@ -19,6 +19,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   may still be refused when an aggregate shape has no runnable lowering
   representation, so `E6009` is not classified as a type error.
 
+### Added — E6010 invalid manifest export
+
+- Assigned `E6010` to invalid `Mind.toml [exports] c_abi` entries after the
+  catalog scan confirmed that Core v1 `E6001` is already the out-of-bounds index
+  code. This keeps the manifest validation diagnostic outside the capability
+  cause namespace and is additive for the planned 1.7.0 specification update.
+
 ### Documentation alignment: pending compiler contracts
 
 - Publish the versioned specification with the documentation site. Pages now

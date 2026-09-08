@@ -377,6 +377,14 @@ E6xxx errors occur during backend execution or while producing a runnable artifa
   MUST NOT publish a partial runnable artifact
 - **Example**: `E6009: Compiler materialization payload 2097160 bytes exceeds limit 2097152`
 
+### E6010: Invalid manifest export
+- **Trigger**: A `Mind.toml [exports] c_abi` entry is empty, exceeds the
+  manifest export bound, or is not a C-style identifier
+- **Required context**: the invalid entry and the validation reason
+- **Artifact contract**: Compilation MUST terminate with a non-zero status;
+  this user configuration error MUST NOT be classified as backend capability
+- **Example**: `E6010: invalid Mind.toml [exports] c_abi entry \`bad name\`: export name must be ASCII alphanumeric or underscore`
+
 ## Diagnostic requirements
 
 All error messages MUST include:
@@ -459,6 +467,7 @@ The reference compiler implements the following error codes:
 | E5001 | Autodiff    | Unsupported operation for autodiff       |
 | E6002 | Backend     | Requested backend unavailable             |
 | E6009 | Materialize | Compiler materialization refusal          |
+| E6010 | Manifest    | Invalid Mind.toml export                  |
 
 **Note**: The reference implementation uses E2xxx for both type AND shape errors (combining
 the spec's E2xxx and E3xxx categories). Most error codes in the spec are reserved for future
