@@ -100,16 +100,24 @@ permission to mutate through a restricted reference.
 
 ### Implementation coverage
 
-The compiler source integration at
-[`8aa25dc5`](https://github.com/star-ga/mind/commit/8aa25dc5ae0d389a95328cac3a6eb64beaa04cb8)
+The compiler source at
+[`143bdd8f`](https://github.com/star-ga/mind/commit/143bdd8f8f85d0bb82e82d88cce0d0725c1998f5)
 retains caller-visible record mutation and value-copy fixed-array containers
-on its Rust/MLIR shared-library path. Existing
-[`aggregate_const_run` controls](https://github.com/star-ga/mind/blob/main/tests/aggregate_const_run.rs)
-execute record parameters and fixed arrays of record references. This source
-integration is not a new published compiler artifact.
+on its Rust/MLIR shared-library path. The
+[`aggregate_const_run` controls](https://github.com/star-ga/mind/blob/143bdd8f8f85d0bb82e82d88cce0d0725c1998f5/tests/aggregate_const_run.rs)
+execute record parameters and fixed arrays of record references. Declared
+fixed-array returns now preserve the record element type for direct and local
+receiver field reads, including aliases resolved in the defining module.
+An unrelated caller alias cannot reinterpret an imported return. Conflicting
+imported return schemas refuse before linking. Executing controls cover these
+paths in
+[`fixed_array_struct_field_run`](https://github.com/star-ga/mind/blob/143bdd8f8f85d0bb82e82d88cce0d0725c1998f5/tests/fixed_array_struct_field_run.rs)
+and
+[`cross_module_field_access_run`](https://github.com/star-ga/mind/blob/143bdd8f8f85d0bb82e82d88cce0d0725c1998f5/tests/cross_module_field_access_run.rs).
+This source coverage is not a new published compiler artifact or evidence of
+pure-MIND native-ELF support.
 
-Struct-owned fixed arrays of records and fixed record arrays flowing through
-some call/return receiver shapes remain unsupported: checking may succeed,
+Struct-owned fixed arrays of records remain unsupported: checking may succeed,
 but shared-library emission refuses with `E6009` and leaves no artifact.
 Interpreter field mutation is also explicitly unsupported. A backend that
 cannot implement an operation under the identity and value rules MUST refuse
