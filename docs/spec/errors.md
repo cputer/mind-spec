@@ -27,7 +27,7 @@ The canonical error-code assignments and stability rules are maintained in
 stable within Core v1; adding a code requires a minor specification release,
 while renumbering or reusing an existing code requires a major release.
 
-The E6xxx catalog distinguishes two current compilation refusals:
+The E6xxx catalog distinguishes these current compilation refusals:
 
 - `E6002` means the requested backend is unavailable.
 - `E6009` means compiler-side aggregate materialization exceeded a deterministic
