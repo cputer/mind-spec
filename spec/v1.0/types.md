@@ -62,6 +62,61 @@ to the ordinary type compatibility rules.
 A comprehensive derivation catalogue is maintained in the implementation notes
 ([informative](https://github.com/star-ga/mind/blob/main/docs/type-system.md)).
 
+## Record identity and fixed-array values
+
+A value of a user-defined struct type denotes a record with identity. A new
+struct literal creates a new record. Binding, assigning, passing or returning
+an existing record value MUST preserve its identity; none of these operations
+implicitly clones its fields. A field mutation through one reference MUST be
+visible through other references to that record. Rebinding a variable changes
+which record that variable denotes; it does not replace the record seen by
+other references.
+
+A fixed array `[T; n]` is a value container. Binding, assigning, passing,
+returning or reading a fixed-array field copies the array's element values.
+Replacing an element in the copy MUST NOT replace the corresponding element
+in the original container. When `T` is a struct type, each element value is a
+record reference: copying the container preserves those record identities,
+not recursive copies of the records. Mutating a referenced record is therefore
+visible through both containers. The same element-value rule applies at each
+fixed-array nesting level that an implementation supports.
+
+These rules distinguish the two operations below:
+
+| Operation | Required observable behavior |
+|---|---|
+| Pass record `r` to a function that mutates one of its fields | The caller sees the field mutation through `r`. |
+| Copy fixed array `a` to `b`, then replace `b[0]` | The element value stored in `a[0]` is unchanged. |
+| Copy a fixed array of records, then mutate a record reached through the copy | Both arrays still refer to that mutated record. |
+| Bind `c` to record `b`, then assign `c.xs[0]` where `xs` is a fixed-array field | The update is visible through `b.xs[0]`, because `b` and `c` denote one record. |
+| Read `b.xs` into a separate fixed-array variable, then replace an element in that variable | The element stored in the record's `xs` field is unchanged. |
+
+Record identity is a language property, not a numerical machine address.
+Physical handles MAY implement references, but their carrier width MUST NOT
+substitute for the record's semantic type. A backend MUST NOT serialize a
+machine address as a canonical language-level identity. These rules do not add
+an implicit record-to-integer conversion, prescribe record equality, or extend
+permission to mutate through a restricted reference.
+
+### Implementation coverage
+
+The compiler source integration at
+[`8aa25dc5`](https://github.com/star-ga/mind/commit/8aa25dc5ae0d389a95328cac3a6eb64beaa04cb8)
+retains caller-visible record mutation and value-copy fixed-array containers
+on its Rust/MLIR shared-library path. Existing
+[`aggregate_const_run` controls](https://github.com/star-ga/mind/blob/main/tests/aggregate_const_run.rs)
+execute record parameters and fixed arrays of record references. This source
+integration is not a new published compiler artifact.
+
+Struct-owned fixed arrays of records and fixed record arrays flowing through
+some call/return receiver shapes remain unsupported: checking may succeed,
+but shared-library emission refuses with `E6009` and leaves no artifact.
+Interpreter field mutation is also explicitly unsupported. A backend that
+cannot implement an operation under the identity and value rules MUST refuse
+it; it MUST NOT silently choose deep-copy semantics, ignore a mutation, or
+report a passing test that omitted the mutation. Cross-backend coverage remains
+limited to the operations independently verified on each backend.
+
 ## Type inference
 
 Implementations MUST support bidirectional type inference:

@@ -17,7 +17,7 @@ limitations under the License.
 ﻿# Type System
 
 > **Status:** Draft  
-> **Last updated:** 2026-09-06
+> **Last updated:** 2026-09-08
 > **MIND Spec Section**
 
 ---
@@ -38,6 +38,15 @@ For example, `[1, 2, 3, 4]` has the required cardinality for `[i64; 4]`, while
 three or five elements do not. A mismatch must produce a static diagnostic at
 the literal with the expected and actual counts. Nonliteral initializers remain
 subject to the ordinary type compatibility rules.
+
+### Record identity and array copies
+
+Struct bindings, assignments, arguments and returns preserve record identity.
+A fixed-array copy has its own element slots; when those elements are records,
+the slots hold references to the same records. Replacing a slot in the copy
+leaves the original slot unchanged, while mutating a referenced record remains
+visible through either container. See the
+[normative contract and implementation coverage](https://github.com/star-ga/mind-spec/blob/main/spec/v1.0/types.md#record-identity-and-fixed-array-values).
 
 ---
 

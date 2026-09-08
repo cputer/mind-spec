@@ -45,9 +45,16 @@ literals follow the same rule. See the
 
 ## Structs
 User-defined compound types.
-```rust
+```mind
 struct Model {
     layers: i32,
     learning_rate: f32,
 }
 ```
+
+Struct values preserve record identity across assignment, calls and returns.
+Fixed arrays copy their containers; record elements remain references to the
+same records. Replacing an array element and mutating the record referenced by
+an element therefore have different effects. See the
+[normative identity and value rules](spec/v1.0/types.md#record-identity-and-fixed-array-values)
+for the contract and current implementation limits.
