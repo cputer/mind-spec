@@ -16,10 +16,10 @@ limitations under the License.
 
 # MIC@3 `0x04` implementation status
 
-**Status: unreleased implementation draft.** The public reference-compiler
-candidate is [PR #256](https://github.com/star-ga/mind/pull/256), currently at
-[`66f43a6b`](https://github.com/star-ga/mind/commit/66f43a6bed42709047682b28cef6bd8e27118c7b)
-against `main`. This page is an informative cross-reference rather than a
+**Status: unreleased implementation draft.** The reference implementation landed
+on compiler `main` through [PR #256](https://github.com/star-ga/mind/pull/256) at
+[`66f43a6b`](https://github.com/star-ga/mind/commit/66f43a6bed42709047682b28cef6bd8e27118c7b).
+This page is an informative cross-reference rather than a
 versioned or normative wire specification; the v04 wire contract, shared
 golden vectors, and release status remain unfrozen.
 
@@ -30,12 +30,12 @@ value types. It is intended to preserve logical identity supplied by the
 compiler. It does not authorize a physical record ABI or infer identity from
 host paths, source order, or scalar handles.
 
-The public candidate provides checked v04 admission and decoder validation. It
+The reference implementation provides checked v04 admission and decoder validation. It
 bounds input size, nesting, allocation, and semantic descriptors, stages
 declarations before cumulative validation, and rejects malformed or unsupported
 content. Its checked evidence path applies the size limit to the complete body
 plus MAP artifact before publication. These are implementation checks for the
-draft candidate and do not establish a released wire contract.
+draft format and do not establish a released wire contract.
 
 The proposal is limited to a scalar instruction subset. Standard-surface and
 tensor instructions, source-to-native aggregate execution, pure-MIND codec
