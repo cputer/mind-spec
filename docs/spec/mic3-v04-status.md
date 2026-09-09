@@ -58,6 +58,60 @@ parity, cross-profile or cross-substrate identity, a frozen protocol, and
 promotion remain separate work. A successful scalar-stage transport result is
 not evidence that those dependencies are complete.
 
+## Draft intrinsic contract alignment
+
+The following table records the ten-row intrinsic registry used by the pending
+[compiler PR #261](https://github.com/star-ga/mind/pull/261), currently at
+[`8c4b83be`](https://github.com/star-ga/mind/commit/8c4b83be0f6956cec174d3c4bbb88d45a8a90d5d).
+The PR is not merged into the compiler reference commit above, so this is a
+draft alignment note and does not make v04 a released wire contract. A
+canonical declaration using the reserved owner `__mind_intrinsic` must use one
+of these exact logical names, physical symbols, arities, and signatures. The
+registry has no generic or variadic intrinsic form.
+
+| Logical name | Physical symbol | Wire signature | Effect metadata | Profiles metadata | Result-use metadata |
+|---|---|---|---|---|---|
+| `argc` | `__mind_argc` | `() -> i64` | argument count | `FrozenNative` | value |
+| `argv` | `__mind_argv` | `(i64) -> i64` | argument vector | `FrozenNative` | value |
+| `alloc` | `__mind_alloc` | `(i64) -> i64` | arena allocation | `FrozenNative`, `RustMlir` | value |
+| `load_i64` | `__mind_load_i64` | `(i64) -> i64` | 8-byte memory read | `FrozenNative`, `RustMlir` | value |
+| `load8` | `__mind_load_i8` | `(i64) -> i64` | 1-byte memory read | `FrozenNative`, `RustMlir` | value |
+| `open` | `__mind_open` | `(i64) -> i64` | read-only open | `FrozenNative`, `RustMlir` | value |
+| `read` | `__mind_read` | `(i64, i64, i64, i64) -> i64` | file-descriptor read; offset is `-1` and ignored | `FrozenNative`, `RustMlir` | value |
+| `store_i64` | `__mind_store_i64` | `(i64, i64) -> i64` | 8-byte memory write | `FrozenNative`, `RustMlir` | `DiscardOnly` in `FrozenNative` |
+| `store8` | `__mind_store_i8` | `(i64, i64) -> i64` | 1-byte memory write | `FrozenNative`, `RustMlir` | `DiscardOnly` in `FrozenNative` |
+| `write` | `__mind_write` | `(i64, i64, i64, i64) -> i64` | file-descriptor write; offset is `-1` and ignored | `FrozenNative`, `RustMlir` | value |
+
+Effect, profile, and result-use columns are registry metadata. In particular,
+`DiscardOnly` describes how a FrozenNative emitter may use a store result; it
+does not change the historical `i64` wire return, and it does not grant native
+admission or prove memory provenance. The offset rule for `read` and `write`
+also leaves all four `i64` parameters in the wire signature. Unknown names,
+wrong owners, wrong arities, wrong scalar types, and generic identities remain
+structured refusals.
+
+## Declared-prefix resource limits
+
+The pure-MIND v04 mirror described by the compiler PR checks only the declared
+prefix: header, required-surface bits, strings, schemas, and function
+declarations. It must refuse the remainder after proving the consumed prefix;
+it is not a whole-codec or native-execution implementation. Its documented
+limits are:
+
+| Resource | Draft mirror limit | Failure behavior |
+|---|---:|---|
+| Admitted input | 10,485,760 bytes (`10 MiB`) | refuse before decoding when larger |
+| Temporary read buffer | admitted limit plus 2 bytes | bounded probe for oversize detection; the extra bytes are never admitted |
+| Re-emitted prefix | 65,536 bytes | refuse when the canonical prefix exceeds the limit |
+| ULEB value | `2^62 - 1` (`4,611,686,018,427,387,903`) | refuse larger values without wrapping |
+| Instruction nesting | 256 | refuse deeper declared instruction bodies |
+| Allocation budget | `min(128 MiB, 1 MiB + 32 × input bytes)` | refuse when checked charges exceed the budget |
+| Semantic descriptor scope | `2^40` elements | refuse per-descriptor or cumulative overflow |
+
+The input cap, prefix cap, and budget are implementation limits for this
+unreleased draft. They do not authorize decoding omitted body sections,
+complete v04 reader/writer compatibility, or native aggregate execution.
+
 Existing `mic@3` versions, including their `0x03` compatibility behavior, remain
 unchanged. This status page establishes no normative v04 byte contract, shared
 vectors, reader/writer contract, or Core v1 requirement. Any future v04
