@@ -60,14 +60,14 @@ not evidence that those dependencies are complete.
 
 ## Draft intrinsic contract alignment
 
-The following table records the ten-row intrinsic registry used by the pending
-[compiler PR #261](https://github.com/star-ga/mind/pull/261), currently at
-[`8c4b83be`](https://github.com/star-ga/mind/commit/8c4b83be0f6956cec174d3c4bbb88d45a8a90d5d).
-The PR is not merged into the compiler reference commit above, so this is a
-draft alignment note and does not make v04 a released wire contract. A
-canonical declaration using the reserved owner `__mind_intrinsic` must use one
-of these exact logical names, physical symbols, arities, and signatures. The
-registry has no generic or variadic intrinsic form.
+The following table records the ten-row intrinsic registry implemented by
+[compiler PR #261](https://github.com/star-ga/mind/pull/261), merged on compiler
+`main` at
+[`a334ead4`](https://github.com/star-ga/mind/commit/a334ead49cfe9e98501c4345d9ec64d6ce2db3b2).
+This remains a draft alignment note and does not make v04 a released wire
+contract. A canonical declaration using the reserved owner `__mind_intrinsic`
+must use one of these exact logical names, physical symbols, arities, and
+signatures. The registry has no generic or variadic intrinsic form.
 
 | Logical name | Physical symbol | Wire signature | Effect metadata | Profiles metadata | Result-use metadata |
 |---|---|---|---|---|---|
@@ -82,7 +82,8 @@ registry has no generic or variadic intrinsic form.
 | `store8` | `__mind_store_i8` | `(i64, i64) -> i64` | 1-byte memory write | `FrozenNative`, `RustMlir` | `DiscardOnly` in `FrozenNative` |
 | `write` | `__mind_write` | `(i64, i64, i64, i64) -> i64` | file-descriptor write; offset is `-1` and ignored | `FrozenNative`, `RustMlir` | value |
 
-Effect, profile, and result-use columns are registry metadata. In particular,
+Effect, profile, and result-use columns are registry metadata, not additional
+fields in the encoded function signature. In particular,
 `DiscardOnly` describes how a FrozenNative emitter may use a store result; it
 does not change the historical `i64` wire return, and it does not grant native
 admission or prove memory provenance. The offset rule for `read` and `write`
@@ -104,7 +105,7 @@ limits are:
 | Temporary read buffer | admitted limit plus 2 bytes | bounded probe for oversize detection; the extra bytes are never admitted |
 | Re-emitted prefix | 65,536 bytes | refuse when the canonical prefix exceeds the limit |
 | ULEB value | `2^62 - 1` (`4,611,686,018,427,387,903`) | refuse larger values without wrapping |
-| Instruction nesting | 256 | refuse deeper declared instruction bodies |
+| Type-descriptor nesting | 256 | refuse deeper declared type descriptors |
 | Allocation budget | `min(128 MiB, 1 MiB + 32 × input bytes)` | refuse when checked charges exceed the budget |
 | Semantic descriptor scope | `2^40` elements | refuse per-descriptor or cumulative overflow |
 
