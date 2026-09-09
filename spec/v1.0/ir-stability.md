@@ -72,12 +72,21 @@ the `mic@1` textual form or the `mic@2.x` binary form is non-conformant.
 
 ## Bench-gate discipline
 
-mindc enforces a **+2% mean regression cap** on the
-`small_matmul / medium_mlp / large_network` pipeline benchmarks
-relative to the frozen baseline at `.bench-baseline-2026-04-28-pratt.txt`.
-Implementations are encouraged (but not required) to maintain equivalent
-discipline; the rationale is that any drift in the surface compiler hot
-path compounds across the runtime hot paths of all downstream backends.
+The reference MIND implementation's CI bench gate measures the T1 frontend
+(`cargo bench --bench compiler --no-default-features`) for
+`small_matmul`, `medium_mlp`, and `large_network` against the frozen
+correctness floor `.bench-baseline-2026-06-01-correctness.txt`. It applies a
+one-sided **+10% regression threshold**: any speedup passes, while a
+trustworthy result above the threshold is a decision-triggering regression.
+Criterion spread above **12%** is inconclusive, and the canonical pipeline
+must provide all three present, trustworthy fixture comparisons. This is a
+no-regression guard; it does not establish or require a speedup objective.
+The comparator supports an optional separately published champion reference,
+but the current workflow supplies only the correctness floor.
+
+
+This describes the reference implementation's CI policy; it is not a
+performance-conformance requirement for other implementations.
 
 ## See also
 
