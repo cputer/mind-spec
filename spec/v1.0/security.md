@@ -115,11 +115,19 @@ Separately, **scalar** IEEE-754 `f64`/`f32` arithmetic (`+ − × ÷ √`) is lo
 - **Signing status**: default emit is **unsigned** (`signature: absent`). Opt-in
   evidence signing (RFC 0016 Phase C), including the AND-combined
   ML-DSA-87 + SLH-DSA-SHAKE-256s hybrid, is **shipped** and
-  enabled only via a key-seed env var — never signed-by-default. Unsigned
+  enabled only with both signing seeds — never signed-by-default. Unsigned
   artifacts stay byte-identical. Refer to the default chain as *tamper-evident*,
   never as a *signed-by-default* chain
-- A signed artifact can prove authorship relative to a pinned pubkey
-  (`mindc verify --signer-pubkey`). An unsigned artifact only proves the
+- The production hybrid requires both public keys in the trust allowlist
+  (`mindc verify --signer-pubkey`, repeated for each key). A missing signature
+  leg or a trust allowlist containing only one leg MUST be refused. Ed25519
+  and the historical Ed25519/ML-DSA-65 hybrid are permanently retired from
+  signing and trust verification; inspection remains available. Standalone
+  ML-DSA-65 is outside the production profile. These controls do not assert
+  that published releases have been signed; release key custody and publication
+  remain separate operational requirements ([compiler PR #262](https://github.com/star-ga/mind/pull/262)).
+- A signed artifact can prove authorship relative to its pinned keys.
+  An unsigned artifact only proves the
   `trace_hash` still matches the hashed mic@3 body
 
 **Dependency pinning**:

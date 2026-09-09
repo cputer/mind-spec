@@ -220,6 +220,13 @@ Byte-identity guarantees:
 
 ## 6. Signing surface
 
+**Historical format boundary:** this section specifies the detached mic@2.1
+surface. It does not authorize the reference compiler to trust a retired
+mic@3 evidence scheme. The current compiler production profile requires
+ML-DSA-87 AND SLH-DSA-SHAKE-256s; Ed25519 and the former Ed25519/ML-DSA-65
+hybrid are refused at signing and trust verification. See the
+[current evidence security contract](../v1.0/security.md).
+
 mic@2.1 reuses the Ed25519 primitive from
 `mind-mem/src/mind_mem/model_signing.py` (`sign_manifest` / `verify_manifest`).
 The signature is itself a MAP key:
