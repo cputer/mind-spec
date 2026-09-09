@@ -91,27 +91,38 @@ also leaves all four `i64` parameters in the wire signature. Unknown names,
 wrong owners, wrong arities, wrong scalar types, and generic identities remain
 structured refusals.
 
-## Declared-prefix resource limits
+## Experimental body mirror and resource limits
 
-The pure-MIND v04 mirror described by the compiler PR checks only the declared
-prefix: header, required-surface bits, strings, schemas, and function
-declarations. It must refuse the remainder after proving the consumed prefix;
-it is not a whole-codec or native-execution implementation. Its documented
-limits are:
+[Compiler PR #264](https://github.com/star-ga/mind/pull/264) extends the
+experimental pure-MIND mirror from the declared prefix through the supported
+core body: module IDs, exports, instructions and scoped value rows. It checks
+module bounds and selected function metadata, including return IDs isolated
+across nested functions. Its native artifact is tested against reference
+decoder outcomes and exact positive-fixture re-emission. This is a review
+candidate, not a released protocol or the production decoder.
+
+Wire-format acceptance is not full semantic validation. Parameter descriptors,
+local-definition coverage, per-function semantic budgets, authority presence
+and string-table minimality remain explicit parity obligations. A passing
+mirror result does not authorize native execution of the represented program.
+The candidate's implementation limits are:
 
 | Resource | Draft mirror limit | Failure behavior |
 |---|---:|---|
 | Admitted input | 10,485,760 bytes (`10 MiB`) | refuse before decoding when larger |
 | Temporary read buffer | admitted limit plus 2 bytes | bounded probe for oversize detection; the extra bytes are never admitted |
-| Re-emitted prefix | 65,536 bytes | refuse when the canonical prefix exceeds the limit |
+| Re-emitted core body | 65,536 bytes | refuse when the body exceeds the mirror limit |
 | ULEB value | `2^62 - 1` (`4,611,686,018,427,387,903`) | refuse larger values without wrapping |
-| Type-descriptor nesting | 256 | refuse deeper declared type descriptors |
+| Type-descriptor nesting | 64 | refuse deeper declared type descriptors |
+| Instruction depth | less than 256, with root depth 0 | refuse depth 256 |
 | Allocation budget | `min(128 MiB, 1 MiB + 32 × input bytes)` | refuse when checked charges exceed the budget |
-| Semantic descriptor scope | `2^40` elements | refuse per-descriptor or cumulative overflow |
+| Implemented descriptor scopes | `2^40` elements | check each descriptor, schema fields and declaration/module totals; full per-function semantic accounting remains open |
 
-The input cap, prefix cap, and budget are implementation limits for this
-unreleased draft. They do not authorize decoding omitted body sections,
-complete v04 reader/writer compatibility, or native aggregate execution.
+The input cap, body cap, and budget are implementation limits for this
+unreleased draft. They do not establish complete v04 reader/writer parity
+or native aggregate execution. The reference allocation accounting charges
+each instruction twice (640 logical bytes total); this is an admission budget,
+not a measured heap allocation.
 
 Existing `mic@3` versions, including their `0x03` compatibility behavior, remain
 unchanged. This status page establishes no normative v04 byte contract, shared

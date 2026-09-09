@@ -117,6 +117,16 @@ and
 This source coverage is not a new published compiler artifact or evidence of
 pure-MIND native-ELF support.
 
+[Compiler PR #263](https://github.com/star-ga/mind/pull/263), merged at
+[`1833f095`](https://github.com/star-ga/mind/commit/1833f095ce74b966287f27932c92733529c08b53),
+extends reference record-field fixed arrays to `i8`, `u8`, `i16` and `u16`.
+Executing shared-artifact controls preserve element width and signedness,
+neighboring fields, and exactly-once receiver/index/right-hand-side evaluation.
+Known opaque handles assigned to narrow elements are refused with `E2036`,
+rather than truncated into address-dependent values. The eight-byte cell stride
+is this reference backend's layout, not a new language-level layout mandate.
+Pure-MIND native record-array support remains a separate capability gate.
+
 Struct-owned fixed arrays of records remain unsupported: checking may succeed,
 but shared-library emission refuses with `E6009` and leaves no artifact.
 Interpreter field mutation is also explicitly unsupported. A backend that
