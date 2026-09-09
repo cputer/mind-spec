@@ -37,6 +37,21 @@ content. Its checked evidence path applies the size limit to the complete body
 plus MAP artifact before publication. These are implementation checks for the
 draft format and do not establish a released wire contract.
 
+The opt-in `compile_source_to_canonical_ir` Rust library API, introduced in
+[compiler PR #259](https://github.com/star-ga/mind/pull/259), binds a source
+snapshot to captured project scope. It preserves resolved function ownership
+and call identities, carries scalar producer facts from the existing type
+checker, and checks every canonical return in its defining function scope.
+Missing facts, changed snapshots, and unsupported source forms are refused.
+This bounded path requires `cross-module-imports`; it returns verified IR
+before optimization or backend execution.
+
+The canonical source slice excludes unit functions, functions without explicit
+return annotations, and bare returns without values. Those restrictions do not
+change ordinary compilation's inferred-return or evaluator unit-placeholder
+behavior. This API supplies neither a standalone MIND driver nor native record
+and array execution.
+
 The proposal is limited to a scalar instruction subset. Standard-surface and
 tensor instructions, source-to-native aggregate execution, pure-MIND codec
 parity, cross-profile or cross-substrate identity, a frozen protocol, and

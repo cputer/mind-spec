@@ -9,6 +9,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Documentation alignment: checked canonical source lowering
+
+- Recorded the opt-in source-to-canonical-IR API from [compiler PR #259](https://github.com/star-ga/mind/pull/259), including captured ownership, checked scalar producer facts, and validation of returns in each function scope.
+- Distinguished canonical source restrictions from ordinary compiler compatibility and kept native aggregate execution, pure-MIND codec parity, and the standalone MIND driver open.
+
 ### Documentation alignment: bounded native project builds
 
 - Recorded the native project-build path landed in [compiler PR #257](https://github.com/star-ga/mind/pull/257): manifest entry and local-import resolution, export visibility, and entry-module ownership of `main` for the admitted scalar/control-flow subset.
