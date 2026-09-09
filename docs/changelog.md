@@ -9,6 +9,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Documentation alignment: bounded native project builds
+
+- Recorded the native project-build path landed in [compiler PR #257](https://github.com/star-ga/mind/pull/257): manifest entry and local-import resolution, export visibility, and entry-module ownership of `main` for the admitted scalar/control-flow subset.
+- Kept Rust host-driver dependence and aggregate/full-language native coverage explicit. Unsupported owned aliases, structs, and enums are refused.
+- Clarified the supported production signing profile, ML-DSA-87 **and** SLH-DSA-SHAKE-256s, and that published releases are currently unsigned. Earlier schemes remain in source pending retirement.
+
 ### Added — E6009 compiler materialization refusal
 
 - Reserved `E6009` for deterministic compiler-side materialization refusal,
