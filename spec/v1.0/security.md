@@ -113,7 +113,8 @@ Separately, **scalar** IEEE-754 `f64`/`f32` arithmetic (`+ − × ÷ √`) is lo
   collision audit found `mic@1` text can drop function-body semantics, supersedes the original GAP-1
   `mic@1`-text rule); hashing on the `mic@1` textual or `mic@2.x` binary form is non-conformant
 - **Signing status**: default emit is **unsigned** (`signature: absent`). Opt-in
-  Ed25519 / ML-DSA-65 / hybrid signing (RFC 0016 Phase C) is **shipped** and
+  evidence signing (RFC 0016 Phase C), including the AND-combined
+  ML-DSA-87 + SLH-DSA-SHAKE-256s hybrid, is **shipped** and
   enabled only via a key-seed env var — never signed-by-default. Unsigned
   artifacts stay byte-identical. Refer to the default chain as *tamper-evident*,
   never as a *signed-by-default* chain
@@ -149,9 +150,48 @@ For gradient-based training:
 ### Cryptographic integrity
 
 **Package signing**:
-- Official MIND releases MUST be signed with PGP/minisign keys
-- Public keys MUST be published via multiple channels (GitHub, mindlang.dev, keybase)
-- Users SHOULD verify signatures before installation
+- The official release-signing policy requires **ML-DSA-87 AND
+  SLH-DSA-SHAKE-256s**. Both signatures MUST verify for the same release
+  descriptor and the exact authorized pair of role-tagged public keys.
+  A missing leg, unsupported scheme, invalid signature, or unauthorized pair
+  MUST reject the release. There MUST NOT be a single-signature fallback.
+- A trusted release identity MUST bind both public keys, their algorithm roles,
+  and the release-signing purpose. Rotation MUST authorize complete pairs;
+  independently allowlisting old and new component keys MUST NOT authorize
+  a new pair assembled from different identities. Revoked pairs MUST reject.
+- The signed descriptor MUST bind the repository, release tag, source commit,
+  target, archive basename, byte length, build recipe and dependency lock
+  identity. It MUST bind the external archive with SHA-512. A compatibility
+  SHA-256 checksum MAY accompany it but MUST NOT replace this binding.
+  Checking a descriptor's own signature or IR-body hash alone does not verify
+  the archive. The verifier MUST check the supplied archive and the caller's
+  expected release identity, tag and target against the signed fields.
+- A signed release manifest MUST identify the complete expected platform-asset
+  set. Missing, extra, duplicate or mismatched assets MUST block publication.
+  Publishing an unsigned subset after signing or verification fails is forbidden.
+- The public trust anchor MUST be distributed through the official repository
+  and `mindlang.dev`, with a documented bootstrap, rotation and revocation
+  procedure. Merely downloading a key beside an archive does not establish trust.
+  Private signing keys MUST remain outside the publication job and public
+  repositories. Verifiers MUST use explicitly trusted identities and MUST NOT
+  silently expand trust from ambient environment settings.
+- Users SHOULD verify releases before installation using a verifier obtained
+  through an independent trusted path. An executable taken only from the
+  unverified archive MUST NOT serve as its own trust bootstrap.
+
+This policy replaces the earlier PGP/minisign requirement. Legacy evidence
+signature formats remain a separate compatibility surface; accepting them for
+ordinary artifacts does not satisfy the release policy.
+
+**Implementation status (2026-09-08):** the reference compiler ships opt-in
+hybrid evidence-signing capability and Linux CI controls. Production release-key
+custody, public trust anchors, the bound release-descriptor workflow and
+independent release replay remain open. Existing archive-plus-checksum releases
+MUST NOT be described as signed releases or as satisfying this policy.
+See the reference [operational signing roadmap](https://github.com/star-ga/mind/blob/main/docs/roadmap.md).
+Normative algorithm references are [FIPS 204](https://csrc.nist.gov/pubs/fips/204/final)
+and [FIPS 205](https://csrc.nist.gov/pubs/fips/205/final); choosing those algorithms
+does not itself establish validation of a cryptographic module.
 
 **Reproducible builds**:
 - Official binaries SHOULD be reproducible from tagged source + build environment spec
